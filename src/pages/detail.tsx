@@ -3,16 +3,24 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { IProducts } from "../models/products";
 import { AppDispatch } from "../store";
-import { Image } from "antd";
+import { Image, Rate, message } from "antd";
 import { getOne } from "../api/products";
+import { useForm } from "react-hook-form";
+import { FetchCommentCreate } from "../redux/comment.reducer";
 
+const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
 const DetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [product, setProduct] = useState<IProducts>({} as IProducts);
+  const { handleSubmit, register, setValue } = useForm();
+  const [CommentProducts, setCommentProducts] = useState()
+  const [value, setValues] = useState(Number);
   console.log(product);
   
   const dispatch = useDispatch<AppDispatch>();
+
+  //theo ìd
   const fetchProductById = async (id: any) => {
     try {
       const { data } = await getOne(id);
@@ -22,6 +30,42 @@ const DetailPage = () => {
       // setCommentProducts(data.product)
     } catch (error) { }
   };
+  //end theo id
+
+  //kiểm tra tài khoản
+  const accessToken = localStorage.getItem("accessToken");
+  const user = localStorage.getItem("user");
+  const userId = JSON.parse(user)
+  // kết thức tài khoản
+  
+  //bình luận
+  const onsubmit = async (comment: any) => {
+    const productId = CommentProducts
+    const rate = value
+    const body = { comment, productId, userId, rate }
+    console.log(body);
+    try {
+      // if (accessToken) {
+      fetchProductById(id);
+      // await comments()// gọi lại hiển thị  trc khi comment
+      const data = dispatch(FetchCommentCreate(body)).unwrap()
+      fetchProductById(id)
+      // comments()
+      console.log(data);
+
+      message.success("bạn đã bình luận thành công")
+      //khi gửi nó xẽ trở về form trống
+      setValue("comment", "")
+      // } else {
+      //   message.warning("bạn cần đăng nhập ")
+      // }
+
+    } catch (error) {
+      message.error("lỗi")
+    }
+
+  }
+  //kết thức bình luận
   useEffect(() => {
     fetchProductById(id);
     
@@ -264,39 +308,24 @@ const DetailPage = () => {
                       </small>
                       <div className="d-flex my-3">
                         <p className="mb-0 mr-2">Đánh giá của bạn * :</p>
-                        <div className="text-primary">
-                          <i className="far fa-star" />
-                          <i className="far fa-star" />
-                          <i className="far fa-star" />
-                          <i className="far fa-star" />
-                          <i className="far fa-star" />
-                        </div>
+                        
                       </div>
-                      <form>
+                      <form onSubmit={handleSubmit(onsubmit)}>
+                        <div className="d-flex my-3">
+                          <p className="mb-0 mr-2">Đánh giá của bạn * :</p>
+                          <div className="text-primary">
+                            <Rate tooltips={desc} onChange={setValues} value={value} />
+                            {value ? <span className="ant-rate-text">{desc[value - 1]}</span> : ''}
+                          </div>
+                        </div>
                         <div className="form-group">
                           <label htmlFor="message">Đánh giá của bạn *</label>
                           <textarea
+                            rows={3}
                             id="message"
-                            cols={30}
-                            rows={5}
-                            className="form-control"
+                            {...register('comment')}
                             defaultValue={""}
-                          />
-                        </div>
-                        <div className="form-group">
-                          <label htmlFor="name">Tên của bạn *</label>
-                          <input
-                            type="text"
                             className="form-control"
-                            id="name"
-                          />
-                        </div>
-                        <div className="form-group">
-                          <label htmlFor="email">Email của bạn *</label>
-                          <input
-                            type="email"
-                            className="form-control"
-                            id="email"
                           />
                         </div>
                         <div className="form-group mb-0">
