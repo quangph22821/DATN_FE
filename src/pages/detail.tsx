@@ -1,56 +1,68 @@
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { IProducts } from "../models/products";
-import { AppDispatch } from "../store";
-import { Image, Rate, message } from "antd";
-import { getOne } from "../api/products";
+// import { fetchAddToCard } from "../redux/cart.reducer";
+import { Image, Pagination, Rate, message } from "antd";
+import { getAll, getOne } from "../api/products";
 import { useForm } from "react-hook-form";
-import { FetchCommentCreate } from "../redux/comment.reducer";
+import React from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../store";
+import { CommentAll, FetchCommentCreate } from "../redux/comment.reducer";
 
 const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
 const DetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [product, setProduct] = useState<IProducts>({} as IProducts);
+  const dispatch = useDispatch<AppDispatch>();
   const { handleSubmit, register, setValue } = useForm();
   const [CommentProducts, setCommentProducts] = useState()
+  const [dataComment, setDataComment] = useState([])
   const [value, setValues] = useState(Number);
-  console.log(product);
-  
-  const dispatch = useDispatch<AppDispatch>();
+  const [bodyProductCategory, setBodyProductCategory] = useState()
 
-  //theo ìd
-  const fetchProductById = async (id: any) => {
+  const fetchProductById = async (_id: any) => {
     try {
-      const { data } = await getOne(id);
+      const { data } = await getOne(_id);
       setProduct(data.product);
       // console.log(data.product.categoryId.name);
 
-      // setCommentProducts(data.product)
+      setCommentProducts(data.product)
     } catch (error) { }
   };
-  //end theo id
+  console.log(product?.categoryId?._id);
+  // const fetchProductCategory=async()=>{
+  //   const {data}= await getAll()
+  //   const dataProductCategory= data.product
+  //   // lọc tất cả products theeo category
+  //   const ProductCategory= dataProductCategory.filter((item:any)=>item?.categoryId?._id===product?.categoryId?._id )
+  //   setBodyProductCategory(ProductCategory)
+  // }
 
-  //kiểm tra tài khoản
   const accessToken = localStorage.getItem("accessToken");
   const user = localStorage.getItem("user");
   const userId = JSON.parse(user)
-  // kết thức tài khoản
-  
-  //bình luận
+
+
+  // đếm comment
+  const countcomment = dataComment.length
+
+
+
   const onsubmit = async (comment: any) => {
     const productId = CommentProducts
     const rate = value
-    const body = { comment, productId, userId, rate }
+    const body = { comment, productId, userId,rate }
     console.log(body);
     try {
       // if (accessToken) {
-      fetchProductById(id);
+      // fetchProductById(id);
       // await comments()// gọi lại hiển thị  trc khi comment
       const data = dispatch(FetchCommentCreate(body)).unwrap()
       fetchProductById(id)
-      // comments()
+      
+      comments()
       console.log(data);
 
       message.success("bạn đã bình luận thành công")
@@ -65,12 +77,25 @@ const DetailPage = () => {
     }
 
   }
-  //kết thức bình luận
+  const comments = async () => {
+    const data = await dispatch(CommentAll()).unwrap()
+    const data1 = await data.filter((item: any) => {
+      return item.productId[0]?._id === product._id
+    })
+    //sắp xếp bình theo giờ
+    data1.sort((a: any, b: any) => new Date(b.updatedAt) - new Date(a.updatedAt))
+    setDataComment(data1)
+  }
+  // console.log(dataComment)
   useEffect(() => {
     fetchProductById(id);
-    
-   
-  }, [product._id,]);
+    // fetchProductCategory()
+    if (product._id) {
+      comments()
+    }
+    setValue("productId", product._id);
+  }, [product._id, setValue]);
+
   return (
     <>
       {/* Breadcrumb Start */}
@@ -90,6 +115,7 @@ const DetailPage = () => {
         </div>
       </div>
       {/* Breadcrumb End */}
+
       {/* Shop Detail Start */}
       <div className="container-fluid pb-5">
         <div className="row px-xl-5">
@@ -102,10 +128,10 @@ const DetailPage = () => {
               <div className="carousel-inner bg-light">
                 <div className="carousel-item active">
                   {/* <img
-                        className="w-100 h-100"
-                        src={product.img?.[0]}
-                        alt="Image"
-                      /> */}
+                    className="w-100 h-100"
+                    src={product.img?.[0]}
+                    alt="Image"
+                  /> */}
                   <Image className="w-100 h-100" src={product.img?.[0]} />
                 </div>
                 <div className="carousel-item">
@@ -136,7 +162,7 @@ const DetailPage = () => {
           </div>
           <div className="col-lg-7 h-auto mb-30">
             <div className="h-100 bg-light p-30">
-              {/* <h3>{product.name}</h3> */}
+              <h3>{product.name}</h3>
               <div className="d-flex mb-3">
                 <div className="text-primary mr-2">
                   <small className="fas fa-star" />
@@ -148,7 +174,7 @@ const DetailPage = () => {
                 <small className="pt-1">(99 Reviews)</small>
               </div>
               <h3 className="font-weight-semi-bold mb-4">
-                {/* {product.price}.000 VNĐ */}
+                {product.price}.000 VNĐ
               </h3>
               <p className="mb-4">
                 Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr
@@ -232,7 +258,7 @@ const DetailPage = () => {
                   data-toggle="tab"
                   href="#tab-pane-3"
                 >
-                  Đánh giá (0)
+                  Đánh giá ({countcomment})
                 </a>
               </div>
               <div className="tab-content">
@@ -270,35 +296,32 @@ const DetailPage = () => {
                   <div className="row">
                     <div className="col-md-6">
                       <h4 className="mb-4">1 review for "Product Name"</h4>
-                      <div className="media mb-4">
-                        <img
-                          src="../../src/assets/img/user.jpg"
-                          alt="Image"
-                          className="img-fluid mr-3 mt-1"
-                          style={{ width: 45 }}
-                        />
-                        <div className="media-body">
-                          <h6>
-                            John Doe
-                            <small>
-                              {" "}
-                              - <i>01 Jan 2045</i>
-                            </small>
-                          </h6>
-                          <div className="text-primary mb-2">
-                            <i className="fas fa-star" />
-                            <i className="fas fa-star" />
-                            <i className="fas fa-star" />
-                            <i className="fas fa-star-half-alt" />
-                            <i className="far fa-star" />
-                          </div>
-                          <p>
-                            Diam amet duo labore stet elitr ea clita ipsum,
-                            tempor labore accusam ipsum et no at. Kasd diam
-                            tempor rebum magna dolores sed sed eirmod ipsum.
-                          </p>
+                      {dataComment.slice(0, 6).map(comment =>
+
+                        < div className="media mb-" >
+                          <><img
+                            src="../../src/assets/img/user.jpg"
+                            alt="Image"
+                            className="img-fluid mr-3 mt-1"
+                            style={{ width: 45 }} /><div className="media-body">
+                              <h6>
+                                {comment?.userId?.name}
+                                <small>
+                                  {" "}
+                                  - <i>{new Date(comment.updatedAt).toLocaleDateString()}</i>
+                                </small>
+                              </h6>
+                              <div className="text-primary mb-2">
+                                <Rate tooltips={desc} disabled value={comment?.rate} />
+                                <span>{desc[comment.rate - 1]}</span>
+                              </div>
+                              <p>
+                                {comment?.comment?.comment}
+                              </p>
+                            </div></>
                         </div>
-                      </div>
+                      )}
+                      <Pagination defaultCurrent={1} total={100} />;
                     </div>
                     <div className="col-md-6">
                       <h4 className="mb-4">Để lại đánh giá</h4>
@@ -306,10 +329,7 @@ const DetailPage = () => {
                         Email của bạn sẽ không được hiển thị công khai. Các
                         trường bắt buộc được đánh dấu *
                       </small>
-                      <div className="d-flex my-3">
-                        <p className="mb-0 mr-2">Đánh giá của bạn * :</p>
-                        
-                      </div>
+
                       <form onSubmit={handleSubmit(onsubmit)}>
                         <div className="d-flex my-3">
                           <p className="mb-0 mr-2">Đánh giá của bạn * :</p>
@@ -343,192 +363,14 @@ const DetailPage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div >
       {/* Shop Detail End */}
 
       {/* Products Start */}
-      <div className="container-fluid py-5">
-        <h2 className="section-title position-relative text-uppercase mx-xl-5 mb-4">
-          <span className="bg-secondary pr-3">Sản phẩm cùng danh mục</span>
-        </h2>
-        <div className="row px-xl-5">
-          <div className="col">
-            <div className="d-flex flex-row mb-3">
-              <div className=" me-3 product-item bg-light">
-                <div className="product-img position-relative overflow-hidden">
-                  <img
-                    className="img-fluid w-100"
-                    src="../../src/assets/img/product-1.jpg"
-                    alt=""
-                  />
-                  <div className="product-action">
-                    <a className="btn btn-outline-dark btn-square" href="">
-                      <i className="fa fa-shopping-cart" />
-                    </a>
-                    <a className="btn btn-outline-dark btn-square" href="">
-                      <i className="far fa-heart" />
-                    </a>
-                    <a className="btn btn-outline-dark btn-square" href="">
-                      <i className="fa fa-sync-alt" />
-                    </a>
-                    <a className="btn btn-outline-dark btn-square" href="">
-                      <i className="fa fa-search" />
-                    </a>
-                  </div>
-                </div>
-                <div className="text-center py-4">
-                  <a className="h6 text-decoration-none text-truncate" href="">
-                    Product Name Goes Here
-                  </a>
-                  <div className="d-flex align-items-center justify-content-center mt-2">
-                    <h5>$123.00</h5>
-                    <h6 className="text-muted ml-2">
-                      <del>$123.00</del>
-                    </h6>
-                  </div>
-                  <div className="d-flex align-items-center justify-content-center mb-1">
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small>(99)</small>
-                  </div>
-                </div>
-              </div>
-              <div className=" me-3 product-item bg-light">
-                <div className="product-img position-relative overflow-hidden">
-                  <img
-                    className="img-fluid w-100"
-                    src="../../src/assets/img/product-2.jpg"
-                    alt=""
-                  />
-                  <div className="product-action">
-                    <a className="btn btn-outline-dark btn-square" href="">
-                      <i className="fa fa-shopping-cart" />
-                    </a>
-                    <a className="btn btn-outline-dark btn-square" href="">
-                      <i className="far fa-heart" />
-                    </a>
-                    <a className="btn btn-outline-dark btn-square" href="">
-                      <i className="fa fa-sync-alt" />
-                    </a>
-                    <a className="btn btn-outline-dark btn-square" href="">
-                      <i className="fa fa-search" />
-                    </a>
-                  </div>
-                </div>
-                <div className="text-center py-4">
-                  <a className="h6 text-decoration-none text-truncate" href="">
-                    Product Name Goes Here
-                  </a>
-                  <div className="d-flex align-items-center justify-content-center mt-2">
-                    <h5>$123.00</h5>
-                    <h6 className="text-muted ml-2">
-                      <del>$123.00</del>
-                    </h6>
-                  </div>
-                  <div className="d-flex align-items-center justify-content-center mb-1">
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small>(99)</small>
-                  </div>
-                </div>
-              </div>
-              <div className=" me-3 product-item bg-light">
-                <div className="product-img position-relative overflow-hidden">
-                  <img
-                    className="img-fluid w-100"
-                    src="../../src/assets/img/product-3.jpg"
-                    alt=""
-                  />
-                  <div className="product-action">
-                    <a className="btn btn-outline-dark btn-square" href="">
-                      <i className="fa fa-shopping-cart" />
-                    </a>
-                    <a className="btn btn-outline-dark btn-square" href="">
-                      <i className="far fa-heart" />
-                    </a>
-                    <a className="btn btn-outline-dark btn-square" href="">
-                      <i className="fa fa-sync-alt" />
-                    </a>
-                    <a className="btn btn-outline-dark btn-square" href="">
-                      <i className="fa fa-search" />
-                    </a>
-                  </div>
-                </div>
-                <div className="text-center py-4">
-                  <a className="h6 text-decoration-none text-truncate" href="">
-                    Product Name Goes Here
-                  </a>
-                  <div className="d-flex align-items-center justify-content-center mt-2">
-                    <h5>$123.00</h5>
-                    <h6 className="text-muted ml-2">
-                      <del>$123.00</del>
-                    </h6>
-                  </div>
-                  <div className="d-flex align-items-center justify-content-center mb-1">
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small>(99)</small>
-                  </div>
-                </div>
-              </div>
-              <div className=" me-3 product-item bg-light">
-                <div className="product-img position-relative overflow-hidden">
-                  <img
-                    className="img-fluid w-100"
-                    src="../../src/assets/img/product-4.jpg"
-                    alt=""
-                  />
-                  <div className="product-action">
-                    <a className="btn btn-outline-dark btn-square" href="">
-                      <i className="fa fa-shopping-cart" />
-                    </a>
-                    <a className="btn btn-outline-dark btn-square" href="">
-                      <i className="far fa-heart" />
-                    </a>
-                    <a className="btn btn-outline-dark btn-square" href="">
-                      <i className="fa fa-sync-alt" />
-                    </a>
-                    <a className="btn btn-outline-dark btn-square" href="">
-                      <i className="fa fa-search" />
-                    </a>
-                  </div>
-                </div>
-                <div className="text-center py-4">
-                  <a className="h6 text-decoration-none text-truncate" href="">
-                    Product Name Goes Here
-                  </a>
-                  <div className="d-flex align-items-center justify-content-center mt-2">
-                    <h5>$123.00</h5>
-                    <h6 className="text-muted ml-2">
-                      <del>$123.00</del>
-                    </h6>
-                  </div>
-                  <div className="d-flex align-items-center justify-content-center mb-1">
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small>(99)</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      
       {/* Products End */}
     </>
-  )
+  );
 };
 
 export default DetailPage;
