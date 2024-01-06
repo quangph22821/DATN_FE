@@ -31,14 +31,14 @@ const DetailPage = () => {
       setCommentProducts(data.product)
     } catch (error) { }
   };
-  console.log(product?.categoryId?._id);
-  // const fetchProductCategory=async()=>{
-  //   const {data}= await getAll()
-  //   const dataProductCategory= data.product
-  //   // lọc tất cả products theeo category
-  //   const ProductCategory= dataProductCategory.filter((item:any)=>item?.categoryId?._id===product?.categoryId?._id )
-  //   setBodyProductCategory(ProductCategory)
-  // }
+  console.log(bodyProductCategory);
+  const fetchProductCategory = async () => {
+    const { data } = await getAll()
+    const dataProductCategory = data.product
+    // lọc tất cả products theeo category
+    const ProductCategory = dataProductCategory.filter((item: any) => item?.categoryId?._id === product?.categoryId?._id)
+    setBodyProductCategory(ProductCategory)
+  }
 
   const accessToken = localStorage.getItem("accessToken");
   const user = localStorage.getItem("user");
@@ -53,7 +53,7 @@ const DetailPage = () => {
   const onsubmit = async (comment: any) => {
     const productId = CommentProducts
     const rate = value
-    const body = { comment, productId, userId,rate }
+    const body = { comment, productId, userId, rate }
     console.log(body);
     try {
       // if (accessToken) {
@@ -61,7 +61,7 @@ const DetailPage = () => {
       // await comments()// gọi lại hiển thị  trc khi comment
       const data = dispatch(FetchCommentCreate(body)).unwrap()
       fetchProductById(id)
-      
+
       comments()
       console.log(data);
 
@@ -89,7 +89,7 @@ const DetailPage = () => {
   // console.log(dataComment)
   useEffect(() => {
     fetchProductById(id);
-    // fetchProductCategory()
+    fetchProductCategory()
     if (product._id) {
       comments()
     }
@@ -367,7 +367,64 @@ const DetailPage = () => {
       {/* Shop Detail End */}
 
       {/* Products Start */}
-      
+      <div className="container-fluid py-5">
+        <h2 className="section-title position-relative text-uppercase mx-xl-5 mb-4">
+          <span className="bg-secondary pr-3">Sản phẩm cùng danh mục</span>
+        </h2>
+        <div className="row px-xl-5">
+          <div className="col">
+            <div className="d-flex flex-row mb-3">
+            {bodyProductCategory&&bodyProductCategory.map(item => (
+  <div className=" me-3 product-item bg-light">
+  <div className="product-img position-relative overflow-hidden">
+    <img
+      className="img-fluid w-100"
+      src={item.img[0]}
+      alt=""
+      style={{maxWidth:362,height:362}}
+    />
+    <div className="product-action">
+      <a className="btn btn-outline-dark btn-square" href="">
+        <i className="fa fa-shopping-cart" />
+      </a>
+      <a className="btn btn-outline-dark btn-square" href="">
+        <i className="far fa-heart" />
+      </a>
+      <a className="btn btn-outline-dark btn-square" href="">
+        <i className="fa fa-sync-alt" />
+      </a>
+      <a className="btn btn-outline-dark btn-square" href="">
+        <i className="fa fa-search" />
+      </a>
+    </div>
+  </div>
+  <div className="text-center py-4">
+    <a className="h6 text-decoration-none text-truncate" href="">
+      Product Name Goes Here
+    </a>
+    <div className="d-flex align-items-center justify-content-center mt-2">
+      <h5>$123.00</h5>
+      <h6 className="text-muted ml-2">
+        <del>$123.00</del>
+      </h6>
+    </div>
+    <div className="d-flex align-items-center justify-content-center mb-1">
+      <small className="fa fa-star text-primary mr-1" />
+      <small className="fa fa-star text-primary mr-1" />
+      <small className="fa fa-star text-primary mr-1" />
+      <small className="fa fa-star text-primary mr-1" />
+      <small className="fa fa-star text-primary mr-1" />
+      <small>(99)</small>
+    </div>
+  </div>
+</div>
+))}
+
+
+            </div>
+          </div>
+        </div>
+      </div>
       {/* Products End */}
     </>
   );
