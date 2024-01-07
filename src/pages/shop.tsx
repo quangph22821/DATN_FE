@@ -1,7 +1,24 @@
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store";
+import { fetchProductsAll } from "../redux/products.reducer";
+import { AsyncThunkAction, Dispatch, AnyAction } from "@reduxjs/toolkit";
+import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
 
 const ShopPage = () => {
-
+  const { product } = useSelector((state: RootState) => state.products);
+  const dispatch = useDispatch<AppDispatch>();
+  
+  const fetchProducts = async () => {
+    try {
+      await dispatch(fetchProductsAll()).unwrap();
+    } catch (error) { }
+  };
+  useEffect(()=>{
+    fetchProducts()
+  })
+  console.log(product);
   return (
     <>
       {/* Breadcrumb Start */}
@@ -184,13 +201,13 @@ const ShopPage = () => {
           {/* Shop Product Start */}
           <div className="col-lg-9 col-md-8">
             <div className="row pb-3">
-              {/* {product.map((item) => ( */}
+              {product.map((item) => (
                 <div className="col-lg-4 col-md-6 col-sm-6 pb-1">
                   <div className="product-item bg-light mb-4">
                     <div className="product-img position-relative overflow-hidden">
                       <img
                         className="img-fluid w-100"
-                        // src={item.img?.[0]}
+                        src={item.img?.[0]}
                         alt=""
                       />
                       <div className="product-action">
@@ -200,25 +217,25 @@ const ShopPage = () => {
                         <a className="btn btn-outline-dark btn-square" href="">
                           <i className="far fa-heart" />
                         </a>
-                        {/* <Link
+                        <Link
                           className="btn btn-outline-dark btn-square"
                           to={`/detail/${item._id}`}
                         >
                           <i className="fa fa-search" />
-                        </Link> */}
+                        </Link>
                       </div>
                     </div>
                     <div className="text-center py-4">
-                      {/* <Link
+                      <Link
                         className="h6 text-decoration-none text-truncate"
                         to={`/detail/${item._id}`}
                       >
                         {item.name}
-                      </Link> */}
+                      </Link>
                       <div className="d-flex align-items-center justify-content-center mt-2">
-                        {/* <h5>{item.price}.000 VNĐ</h5> */}
+                        <h5>{item.price}.000 VNĐ</h5>
                         <h6 className="text-muted ml-2">
-                          {/* <del>$123.00</del> */}
+                          <del>$123.00</del>
                         </h6>
                       </div>
                       <div className="d-flex align-items-center justify-content-center mb-1">
@@ -232,7 +249,7 @@ const ShopPage = () => {
                     </div>
                   </div>
                 </div>
-              {/* ))} */}
+              ))} 
               <div className="col-12">
                 <nav>
                   <ul className="pagination justify-content-center">
@@ -276,3 +293,5 @@ const ShopPage = () => {
 };
 
 export default ShopPage;
+
+
