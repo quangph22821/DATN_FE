@@ -43,13 +43,25 @@ const DetailPage = () => {
   const accessToken = localStorage.getItem("accessToken");
   const user = localStorage.getItem("user");
   const userId = JSON.parse(user)
+  ////////// phân trang
 
+  const pageSize = 4; // Số sản phẩm trên mỗi trang
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Tính toán dữ liệu cho trang hiện tại
+  const indexOfLastProduct = currentPage * pageSize;
+  const indexOfFirstProduct = indexOfLastProduct - pageSize;
+  const currentComment = dataComment.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+  //////kết thức phân trang
 
   // đếm comment
   const countcomment = dataComment.length
 
-
-
+  /// form bình luận
   const onsubmit = async (comment: any) => {
     const productId = CommentProducts
     const rate = value
@@ -296,14 +308,15 @@ const DetailPage = () => {
                   <div className="row">
                     <div className="col-md-6">
                       <h4 className="mb-4">1 review for "Product Name"</h4>
-                      {dataComment.slice(0, 6).map(comment =>
-
-                        < div className="media mb-" >
-                          <><img
-                            src="../../src/assets/img/user.jpg"
-                            alt="Image"
-                            className="img-fluid mr-3 mt-1"
-                            style={{ width: 45 }} /><div className="media-body">
+                      
+                        {currentComment.map(comment => (
+                          <><div key={comment.id} className="media mb-">
+                            <img
+                              src="../../src/assets/img/user.jpg"
+                              alt="Image"
+                              className="img-fluid mr-3 mt-1"
+                              style={{ width: 45 }} />
+                            <div className="media-body">
                               <h6>
                                 {comment?.userId?.name}
                                 <small>
@@ -315,13 +328,17 @@ const DetailPage = () => {
                                 <Rate tooltips={desc} disabled value={comment?.rate} />
                                 <span>{desc[comment.rate - 1]}</span>
                               </div>
-                              <p>
-                                {comment?.comment?.comment}
-                              </p>
-                            </div></>
-                        </div>
-                      )}
-                      <Pagination defaultCurrent={1} total={100} />;
+                              <p>{comment?.comment?.comment}</p>
+                            </div>
+                            {/* Đặt Pagination ở đây để tính toán số lượng trang đúng */}
+
+                          </div></>
+                        ))}
+                       <Pagination
+                              total={dataComment.length}
+                              pageSize={pageSize}
+                              onChange={handlePageChange} />
+                      
                     </div>
                     <div className="col-md-6">
                       <h4 className="mb-4">Để lại đánh giá</h4>
@@ -374,51 +391,44 @@ const DetailPage = () => {
         <div className="row px-xl-5">
           <div className="col">
             <div className="d-flex flex-row mb-3">
-            {bodyProductCategory&&bodyProductCategory.map(item => (
-  <div className=" me-3 product-item bg-light">
-  <div className="product-img position-relative overflow-hidden">
-    <img
-      className="img-fluid w-100"
-      src={item.img[0]}
-      alt=""
-      style={{maxWidth:362,height:362}}
-    />
-    <div className="product-action">
-      <a className="btn btn-outline-dark btn-square" href="">
-        <i className="fa fa-shopping-cart" />
-      </a>
-      <a className="btn btn-outline-dark btn-square" href="">
-        <i className="far fa-heart" />
-      </a>
-      <a className="btn btn-outline-dark btn-square" href="">
-        <i className="fa fa-sync-alt" />
-      </a>
-      <a className="btn btn-outline-dark btn-square" href="">
-        <i className="fa fa-search" />
-      </a>
-    </div>
-  </div>
-  <div className="text-center py-4">
-    <a className="h6 text-decoration-none text-truncate" href="">
-      Product Name Goes Here
-    </a>
-    <div className="d-flex align-items-center justify-content-center mt-2">
-      <h5>$123.00</h5>
-      <h6 className="text-muted ml-2">
-        <del>$123.00</del>
-      </h6>
-    </div>
-    <div className="d-flex align-items-center justify-content-center mb-1">
-      <small className="fa fa-star text-primary mr-1" />
-      <small className="fa fa-star text-primary mr-1" />
-      <small className="fa fa-star text-primary mr-1" />
-      <small className="fa fa-star text-primary mr-1" />
-      <small className="fa fa-star text-primary mr-1" />
-      <small>(99)</small>
-    </div>
-  </div>
-</div>
-))}
+              {bodyProductCategory && bodyProductCategory.map(item => (
+                <div className=" me-3 product-item bg-light">
+                  <div className="product-img position-relative overflow-hidden">
+                    <img
+                      className="img-fluid w-100"
+                      src={item.img[0]}
+                      alt=""
+                      style={{ maxWidth: 362, height: 362 }}
+                    />
+                    <div className="product-action">
+                      <a className="btn btn-outline-dark btn-square" href="">
+                        <i className="fa fa-shopping-cart" />
+                      </a>
+                      <a className="btn btn-outline-dark btn-square" href="">
+                        <i className="far fa-heart" />
+                      </a>
+                      <a className="btn btn-outline-dark btn-square" href="">
+                        <i className="fa fa-sync-alt" />
+                      </a>
+                      <a className="btn btn-outline-dark btn-square" href="">
+                        <i className="fa fa-search" />
+                      </a>
+                    </div>
+                  </div>
+                  <div className="text-center py-4">
+                    <a className="h6 text-decoration-none text-truncate" href="">
+                      {item.name}
+                    </a>
+                    <div className="d-flex align-items-center justify-content-center mt-2">
+                      <h5>{item.price}</h5>
+                      <h6 className="text-muted ml-2">
+                        <del>$123.00</del>
+                      </h6>
+                    </div>
+
+                  </div>
+                </div>
+              ))}
 
 
             </div>
