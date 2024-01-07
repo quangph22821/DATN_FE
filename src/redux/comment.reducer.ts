@@ -33,13 +33,13 @@ const initalState={
  }
  )
  //
- export const CommentDelete=createAsyncThunk("comment/FetchComentDelete",
-    async(id:any)=>{
-        
-        
+ export const CommentDelete = createAsyncThunk("comment/FetchComentDelete",async(id:any)=>{
+        console.log(id);
         try{
             const data= await getdelete(id)
-            return data
+            // return data
+            console.log(data);
+            
         }catch{
 
         }
@@ -50,9 +50,18 @@ const initalState={
     initialState:initalState,
     reducers: {},
     extraReducers:(builder)=>{
-        builder.addCase(FetchCommentCreate.fulfilled,(state)=>{
+        builder.addCase(CommentAll.fulfilled,(state,action)=>{
+            state.Comment= action.payload
             state.isLoading= true
         })
+        builder.addCase(FetchCommentCreate.fulfilled,(state)=>{
+            state.isLoading= false
+        }),
+        builder.addCase(CommentDelete.fulfilled, (state,action) => {
+            state.isLoading = false;
+          
+          });
+          
     }
  })
  export const CommentReducer= Comments.reducer

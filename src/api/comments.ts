@@ -8,5 +8,6 @@ import instance from "."
     return instance.get("comment")
  }
  export const getdelete=(id:any)=>{
-   return instance.delete("comment/"+id,)
+  console.log(id)
+   return instance.delete(`comment/${id}`)
  }

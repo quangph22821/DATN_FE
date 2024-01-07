@@ -2,17 +2,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { IProducts } from "../models/products";
 // import { fetchAddToCard } from "../redux/cart.reducer";
-import { Image, Pagination, Rate, message } from "antd";
+import { Button, Flex, Image, Pagination, Rate, message } from "antd";
 import { getAll, getOne } from "../api/products";
 import { useForm } from "react-hook-form";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store";
-import { CommentAll, FetchCommentCreate } from "../redux/comment.reducer";
+import { CommentAll, CommentDelete, FetchCommentCreate } from "../redux/comment.reducer";
+import { current } from "@reduxjs/toolkit";
 
 const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
 const DetailPage = () => {
-  const navigate = useNavigate();
   const { id } = useParams();
   const [product, setProduct] = useState<IProducts>({} as IProducts);
   const dispatch = useDispatch<AppDispatch>();
@@ -31,7 +31,6 @@ const DetailPage = () => {
       setCommentProducts(data.product)
     } catch (error) { }
   };
-  console.log(bodyProductCategory);
   const fetchProductCategory = async () => {
     const { data } = await getAll()
     const dataProductCategory = data.product
@@ -43,6 +42,7 @@ const DetailPage = () => {
   const accessToken = localStorage.getItem("accessToken");
   const user = localStorage.getItem("user");
   const userId = JSON.parse(user)
+
   ////////// phân trang
 
   const pageSize = 4; // Số sản phẩm trên mỗi trang
@@ -56,6 +56,7 @@ const DetailPage = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+
   //////kết thức phân trang
 
   // đếm comment
@@ -75,8 +76,6 @@ const DetailPage = () => {
       fetchProductById(id)
 
       comments()
-      console.log(data);
-
       message.success("bạn đã bình luận thành công")
       //khi gửi nó xẽ trở về form trống
       setValue("comment", "")
@@ -89,6 +88,8 @@ const DetailPage = () => {
     }
 
   }
+
+
   const comments = async () => {
     const data = await dispatch(CommentAll()).unwrap()
     const data1 = await data.filter((item: any) => {
@@ -99,9 +100,19 @@ const DetailPage = () => {
     setDataComment(data1)
   }
   // console.log(dataComment)
+  ////xóa comment của tài khoản
+  const dele = async (id) => {
+    try {
+      await dispatch(CommentDelete(id))
+      comments()
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+    }
+  }
   useEffect(() => {
     fetchProductById(id);
     fetchProductCategory()
+    dele(id)
     if (product._id) {
       comments()
     }
@@ -308,37 +319,45 @@ const DetailPage = () => {
                   <div className="row">
                     <div className="col-md-6">
                       <h4 className="mb-4">1 review for "Product Name"</h4>
-                      
-                        {currentComment.map(comment => (
-                          <><div key={comment.id} className="media mb-">
-                            <img
-                              src="../../src/assets/img/user.jpg"
-                              alt="Image"
-                              className="img-fluid mr-3 mt-1"
-                              style={{ width: 45 }} />
-                            <div className="media-body">
-                              <h6>
-                                {comment?.userId?.name}
-                                <small>
-                                  {" "}
-                                  - <i>{new Date(comment.updatedAt).toLocaleDateString()}</i>
-                                </small>
-                              </h6>
-                              <div className="text-primary mb-2">
-                                <Rate tooltips={desc} disabled value={comment?.rate} />
-                                <span>{desc[comment.rate - 1]}</span>
-                              </div>
-                              <p>{comment?.comment?.comment}</p>
-                            </div>
-                            {/* Đặt Pagination ở đây để tính toán số lượng trang đúng */}
 
-                          </div></>
-                        ))}
-                       <Pagination
-                              total={dataComment.length}
-                              pageSize={pageSize}
-                              onChange={handlePageChange} />
-                      
+                      {currentComment.map(comment => (
+                        <><div key={comment.id} className="media mb-">
+                          <img
+                            src="../../src/assets/img/user.jpg"
+                            alt="Image"
+                            className="img-fluid mr-3 mt-1"
+                            style={{ width: 45 }} />
+                          <div className="media-body">
+                            <h6>
+                              {comment?.userId?.name}
+                              <small>
+                                {" "}
+                                - <i>{new Date(comment.updatedAt).toLocaleDateString()}</i>
+                              </small>
+                            </h6>
+                            <div className="text-primary mb-2">
+                              <Rate tooltips={desc} disabled value={comment?.rate} />
+                              <span>{desc[comment.rate - 1]}</span>
+                            </div>
+                            <p>{comment?.comment?.comment}</p>
+                          </div>
+                          {/* Đặt Pagination ở đây để tính toán số lượng trang đúng */}
+
+                        </div>
+                          {userId._id === comment.userId._id && (
+                            <Flex gap="small" style={{ marginLeft: 400 }} wrap="wrap">
+                              <Button onClick={() => dele(comment._id)}>xóa bình luận</Button>
+
+                            </Flex>
+                          )
+                          }
+                        </>
+                      ))}
+                      <Pagination
+                        total={dataComment.length}
+                        pageSize={pageSize}
+                        onChange={handlePageChange} />
+
                     </div>
                     <div className="col-md-6">
                       <h4 className="mb-4">Để lại đánh giá</h4>
