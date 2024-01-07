@@ -3,7 +3,8 @@ import { AppDispatch, RootState } from "../store";
 import { fetchProductsAll } from "../redux/products.reducer";
 import { AsyncThunkAction, Dispatch, AnyAction } from "@reduxjs/toolkit";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Pagination } from "antd";
 
 
 const ShopPage = () => {
@@ -15,6 +16,24 @@ const ShopPage = () => {
       await dispatch(fetchProductsAll()).unwrap();
     } catch (error) { }
   };
+
+
+    /// phân trang
+
+    const pageSize = 6; // Số sản phẩm trên mỗi trang
+    const [currentPage, setCurrentPage] = useState(1);
+    // Tính toán dữ liệu cho trang hiện tại
+    const indexOfLastProduct = currentPage * pageSize;
+    const indexOfFirstProduct = indexOfLastProduct - pageSize;
+    const currentProducts = product.slice(indexOfFirstProduct, indexOfLastProduct);
+  
+    const handlePageChange = (page) => {
+      setCurrentPage(page);
+    };
+    //kết thúc phântrang
+    
+    /// nếu có tatats cả sản phẩm thì không hiển thị theo danh sách và ngược lại
+  const [check, setcheck] = useState(true)
   useEffect(()=>{
     fetchProducts()
   })
@@ -49,74 +68,81 @@ const ShopPage = () => {
               <span className="bg-secondary pr-3">Lọc theo giá</span>
             </h5>
             <div className="bg-light p-4 mb-30">
-              <form>
+              {/* danh sách theo danh muc */}
+              {/* <form>
                 <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                   <input
                     type="checkbox"
                     className="custom-control-input"
-                    id="price-all"
+                    id="price-all" onClick={() => setcheck(true)}
                   />
                   <label className="custom-control-label" htmlFor="price-all">
                     Tất cả giá cả
                   </label>
                   <span className="badge border font-weight-normal">1000</span>
                 </div>
-                <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3" onClick={() => setcheck(false)}>
                   <input
                     type="checkbox"
                     className="custom-control-input"
                     id="price-all"
+
                   />
-                  <label className="custom-control-label" htmlFor="price-1">
-                    $0 - $100
+                  <label className="custom-control-label" onClick={() => idcategory(category[0]._id)} htmlFor="price-1">
+                    {category[0]?.name}
                   </label>
-                  <span className="badge border font-weight-normal">150</span>
+                  <span className="badge border font-weight-normal">({count1.length})</span>
                 </div>
-                <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3" onClick={() => setcheck(false)}>
                   <input
                     type="checkbox"
                     className="custom-control-input"
-                    id="price-2"
+                    id="price-all"
+
                   />
-                  <label className="custom-control-label" htmlFor="price-2">
-                    $100 - $200
+                  <label className="custom-control-label" onClick={() => idcategory(category[1]._id)} htmlFor="price-1">
+                    {category[1]?.name}
                   </label>
-                  <span className="badge border font-weight-normal">295</span>
+                  <span className="badge border font-weight-normal">({count2.length})</span>
                 </div>
-                <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3" onClick={() => setcheck(false)}>
                   <input
                     type="checkbox"
                     className="custom-control-input"
-                    id="price-3"
+                    id="price-all"
+
                   />
-                  <label className="custom-control-label" htmlFor="price-3">
-                    $200 - $300
+                  <label className="custom-control-label" onClick={() => idcategory(category[2]._id)} htmlFor="price-1">
+                    {category[2]?.name}
                   </label>
-                  <span className="badge border font-weight-normal">246</span>
+                  <span className="badge border font-weight-normal">({count3.length})</span>
                 </div>
-                <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3" onClick={() => setcheck(false)}>
                   <input
                     type="checkbox"
                     className="custom-control-input"
-                    id="price-4"
+                    id="price-all"
+
                   />
-                  <label className="custom-control-label" htmlFor="price-4">
-                    $300 - $400
+                  <label className="custom-control-label" onClick={() => idcategory(category[3]._id)} htmlFor="price-1">
+                    {category[3]?.name}
                   </label>
-                  <span className="badge border font-weight-normal">145</span>
+                  <span className="badge border font-weight-normal">({count4.length})</span>
                 </div>
-                <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between">
+                <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3" onClick={() => setcheck(false)}>
                   <input
                     type="checkbox"
                     className="custom-control-input"
-                    id="price-5"
+                    id="price-all"
+
                   />
-                  <label className="custom-control-label" htmlFor="price-5">
-                    $400 - $500
+                  <label className="custom-control-label" onClick={() => idcategory(category[4]._id)} htmlFor="price-1">
+                    {category[4]?.name}
                   </label>
-                  <span className="badge border font-weight-normal">168</span>
+                  <span className="badge border font-weight-normal">({count5.length})</span>
                 </div>
-              </form>
+              </form> */}
+              {/* kết thúc tên danh mục */}
             </div>
             {/* Price End */}
 
@@ -201,7 +227,7 @@ const ShopPage = () => {
           {/* Shop Product Start */}
           <div className="col-lg-9 col-md-8">
             <div className="row pb-3">
-              {product.map((item) => (
+              {check ? (<> {currentProducts.map((item) => (
                 <div className="col-lg-4 col-md-6 col-sm-6 pb-1">
                   <div className="product-item bg-light mb-4">
                     <div className="product-img position-relative overflow-hidden">
@@ -209,6 +235,7 @@ const ShopPage = () => {
                         className="img-fluid w-100"
                         src={item.img?.[0]}
                         alt=""
+                        style={{ width: 302, height: 302 }}
                       />
                       <div className="product-action">
                         <a className="btn btn-outline-dark btn-square" href="">
@@ -235,7 +262,7 @@ const ShopPage = () => {
                       <div className="d-flex align-items-center justify-content-center mt-2">
                         <h5>{item.price}.000 VNĐ</h5>
                         <h6 className="text-muted ml-2">
-                          <del>$123.00</del>
+                          {/* <del>$123.00</del> */}
                         </h6>
                       </div>
                       <div className="d-flex align-items-center justify-content-center mb-1">
@@ -249,35 +276,72 @@ const ShopPage = () => {
                     </div>
                   </div>
                 </div>
-              ))} 
+              ))}
+                <Pagination style={{ margin: "auto" }}
+                  total={product.length}
+                  pageSize={pageSize}
+                  onChange={handlePageChange}
+
+                />
+              </>) : (<> {cate.map((item) => (
+                <><div className="col-lg-4 col-md-6 col-sm-6 pb-1">
+                  <div className="product-item bg-light mb-4">
+                    <div className="product-img position-relative overflow-hidden">
+                      <img
+                        className="img-fluid w-100"
+                        src={item.img?.[0]}
+                        alt=""
+                        width={362}
+                        height={362} />
+                      <div className="product-action">
+                        <a className="btn btn-outline-dark btn-square" href="">
+                          <i className="fa fa-shopping-cart" />
+                        </a>
+                        <a className="btn btn-outline-dark btn-square" href="">
+                          <i className="far fa-heart" />
+                        </a>
+                        <Link
+                          className="btn btn-outline-dark btn-square"
+                          to={`/detail/${item._id}`}
+                        >
+                          <i className="fa fa-search" />
+                        </Link>
+                      </div>
+                    </div>
+                    <div className="text-center py-4">
+                      <Link
+                        className="h6 text-decoration-none text-truncate"
+                        to={`/detail/${item._id}`}
+                      >
+                        {item.name}
+                      </Link>
+                      <div className="d-flex align-items-center justify-content-center mt-2">
+                        <h5>{item.price}.000 VNĐ</h5>
+                        <h6 className="text-muted ml-2">
+                          {/* <del>$123.00</del> */}
+                        </h6>
+                      </div>
+                      <div className="d-flex align-items-center justify-content-center mb-1">
+                        <small className="fa fa-star text-primary mr-1" />
+                        <small className="fa fa-star text-primary mr-1" />
+                        <small className="fa fa-star text-primary mr-1" />
+                        <small className="fa fa-star text-primary mr-1" />
+                        <small className="fa fa-star text-primary mr-1" />
+                        <small>(99)</small>
+                      </div>
+                    </div>
+                  </div>
+                </div><Pagination
+                    current={currentPage}
+                    total={cate.length}
+                    pageSize={pageSize}
+                    onChange={handlePageChange} /></>
+              ))}</>)}
               <div className="col-12">
                 <nav>
                   <ul className="pagination justify-content-center">
-                    <li className="page-item disabled">
-                      <a className="page-link" href="#">
-                        Previous
-                      </a>
-                    </li>
-                    <li className="page-item active">
-                      <a className="page-link" href="#">
-                        1
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        2
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        3
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        Next
-                      </a>
-                    </li>
+                    {/* Hiển thị thanh phân trang */}
+
                   </ul>
                 </nav>
               </div>
