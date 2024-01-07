@@ -69,11 +69,11 @@ const ShopPage = () => {
 
   // lọc ra 2 cái bảng cùng id để lấy ra sản phẩm cùng id , đếm sản phẩm trong danh mục có bao nhiêu sản phẩm
 
-  // const count1 = product.filter((item: any) => item.categoryId && item.categoryId._id == category[0]?._id)
-  // const count2 = product.filter((item: any) => item.categoryId && item.categoryId._id == category[1]?._id)
-  // const count3 = product.filter((item: any) => item.categoryId && item.categoryId._id == category[2]?._id)
-  // const count4 = product.filter((item: any) => item.categoryId && item.categoryId._id == category[3]?._id)
-  // const count5 = product.filter((item: any) => item.categoryId && item.categoryId._id == category[4]?._id)
+  const count1 = product.filter((item: any) => item.categoryId && item.categoryId._id == category[0]?._id)
+  const count2 = product.filter((item: any) => item.categoryId && item.categoryId._id == category[1]?._id)
+  const count3 = product.filter((item: any) => item.categoryId && item.categoryId._id == category[2]?._id)
+  const count4 = product.filter((item: any) => item.categoryId && item.categoryId._id == category[3]?._id)
+  const count5 = product.filter((item: any) => item.categoryId && item.categoryId._id == category[4]?._id)
 
 
   /// nếu có tatats cả sản phẩm thì không hiển thị theo danh sách và ngược lại
@@ -133,7 +133,7 @@ const ShopPage = () => {
                   <label className="custom-control-label" htmlFor="price-all">
                     Tất cả sản phẩm 
                   </label>
-                  {/* <span className="badge border font-weight-normal">{product.length}</span> */}
+                  <span className="badge border font-weight-normal">{product.length}</span>
                 </div>
                 <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3" onClick={() => setcheck(false)}>
                   <input
@@ -145,7 +145,7 @@ const ShopPage = () => {
                   <label className="custom-control-label" onClick={() => idcategory(category[0]._id)} htmlFor="price-1">
                     {category[0]?.name}
                   </label>
-                  {/* <span className="badge border font-weight-normal">({count1.length})</span> */}
+                  <span className="badge border font-weight-normal">({count1.length})</span>
                 </div>
                 <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3" onClick={() => setcheck(false)}>
                   <input
@@ -157,7 +157,7 @@ const ShopPage = () => {
                   <label className="custom-control-label" onClick={() => idcategory(category[1]._id)} htmlFor="price-1">
                     {category[1]?.name}
                   </label>
-                  {/* <span className="badge border font-weight-normal">({count2.length})</span> */}
+                  <span className="badge border font-weight-normal">({count2.length})</span>
                 </div>
                 <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3" onClick={() => setcheck(false)}>
                   <input
@@ -169,7 +169,7 @@ const ShopPage = () => {
                   <label className="custom-control-label" onClick={() => idcategory(category[2]._id)} htmlFor="price-1">
                     {category[2]?.name}
                   </label>
-                  {/* <span className="badge border font-weight-normal">({count3.length})</span> */}
+                  <span className="badge border font-weight-normal">({count3.length})</span>
                 </div>
                 <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3" onClick={() => setcheck(false)}>
                   <input
@@ -181,7 +181,7 @@ const ShopPage = () => {
                   <label className="custom-control-label" onClick={() => idcategory(category[3]._id)} htmlFor="price-1">
                     {category[3]?.name}
                   </label>
-                  {/* <span className="badge border font-weight-normal">({count4.length})</span> */}
+                  <span className="badge border font-weight-normal">({count4.length})</span>
                 </div>
                 <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3" onClick={() => setcheck(false)}>
                   <input
@@ -193,7 +193,7 @@ const ShopPage = () => {
                   <label className="custom-control-label" onClick={() => idcategory(category[4]._id)} htmlFor="price-1">
                     {category[4]?.name}
                   </label>
-                  {/* <span className="badge border font-weight-normal">({count5.length})</span> */}
+                  <span className="badge border font-weight-normal">({count5.length})</span>
                 </div>
               </form>
               {/* kết thúc tên danh mục */}
