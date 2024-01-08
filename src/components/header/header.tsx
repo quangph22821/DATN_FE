@@ -1,6 +1,15 @@
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { setSearchTerm } from "../../redux/Search.reducer";
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const searchTerm = useSelector((state) => state.search.searchTerm);
+
+  const handleSearch = (e:any) => {
+    dispatch(setSearchTerm(e.target.value));
+  };
+ console.log(searchTerm);
  
   return (
     <>
@@ -27,6 +36,8 @@ const Header = () => {
               <div className="input-group">
                 <input
                   type="text"
+                  value={searchTerm}
+                  onChange={handleSearch}
                   className="form-control"
                   placeholder="Tìm kiếm sản phẩm"
                 />

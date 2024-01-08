@@ -8,6 +8,7 @@ import { Pagination } from "antd";
 import { fetchCategoriesAll } from "../redux/categories.reducer";
 import { useForm } from "react-hook-form";
 import { IProducts } from "../models/products";
+import { search } from "./search";
 
 
 const ShopPage = () => {
@@ -65,7 +66,7 @@ const ShopPage = () => {
     const catego = await product.filter((item: any) => item.categoryId && item.categoryId._id == id)
     setcate(catego as any)
   }
-  console.log(cate.length);
+
 
   // lọc ra 2 cái bảng cùng id để lấy ra sản phẩm cùng id , đếm sản phẩm trong danh mục có bao nhiêu sản phẩm
 
@@ -78,19 +79,50 @@ const ShopPage = () => {
 
   /// nếu có tatats cả sản phẩm thì không hiển thị theo danh sách và ngược lại
   const [check, setcheck] = useState(true)
-  console.log(check);
 
-  useEffect(() => {
+  /// nếu có tatats cả sản phẩm thì không hiển thị theo tìm kiếm và ngược lại
+  const [checkAll, setcheckAll] = useState(true)
+
+
+
+  /// search
+  const searchTerm = useSelector((state) => state.search.searchTerm);
+  const [search, setsearch] = useState()
+  // Lọc sản phẩm theo searchTerm
+
+    const filteredProducts =  product.filter((product) =>{
+      return   product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    }
+    )
+
+// Chỉ gọi setcheckAll khi giá trị thay đổi
+useEffect(() => {
+  if (filteredProducts.length > 0) {
+    setcheckAll(false);
+  } else {
+    setcheckAll(true);
+  }
+}, [filteredProducts]); // Phải cung cấp mảng dependency để chỉ gọi useEffect khi giá trị thay đổi
+
+ console.log(checkAll);
+ 
+ 
+
+  useEffect(() => { 
+    fetchProductById(_id);
     fetchProducts();
     fetchCategories();
-    fetchProductById(_id);
-  }, []);
+    setValue("productId", products._id);
+  },[products._id, setValue]);
+  // if (minh.length > 1) {
+  //   setcheckAll(true);
+  // } else {
+  //   setcheckAll(false);
+  // }
+  // console.log(search);
 
-  // ADD TO CART
 
-  useEffect(() => {
-    setValue("productId", products._id); // Đặt giá trị mặc định cho trường 'id'
-  }, [products._id, setValue]);
+  
   const accessToken = localStorage.getItem("accessToken");
   return (
     <>
@@ -124,14 +156,14 @@ const ShopPage = () => {
             <div className="bg-light p-4 mb-30">
               {/* danh sách theo danh muc */}
               <form>
-                <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3" onClick={() => setcheckAll(true)}>
                   <input
                     type="checkbox"
                     className="custom-control-input"
                     id="price-all" onClick={() => setcheck(true)}
                   />
                   <label className="custom-control-label" htmlFor="price-all">
-                    Tất cả sản phẩm 
+                    Tất cả sản phẩm
                   </label>
                   <span className="badge border font-weight-normal">{product.length}</span>
                 </div>
@@ -281,7 +313,7 @@ const ShopPage = () => {
           {/* Shop Product Start */}
           <div className="col-lg-9 col-md-8">
             <div className="row pb-3">
-              {check ? (<> {currentProducts.map((item) => (
+              {checkAll ? (<>{check ? (<> {currentProducts.map((item) => (
                 <div className="col-lg-4 col-md-6 col-sm-6 pb-1">
                   <div className="product-item bg-light mb-4">
                     <div className="product-img position-relative overflow-hidden">
@@ -319,7 +351,7 @@ const ShopPage = () => {
                           {/* <del>$123.00</del> */}
                         </h6>
                       </div>
-                      
+
                     </div>
                   </div>
                 </div>
@@ -380,12 +412,56 @@ const ShopPage = () => {
                   </div>
                 </div></>
               ))}
-              <Pagination
-                    current={currentPage}
-                    total={cate.length}
-                    pageSize={pageSize}
-                    onChange={handlePageChange} />
-              </>)}
+                <Pagination
+                  current={currentPage}
+                  total={cate.length}
+                  pageSize={pageSize}
+                  onChange={handlePageChange} />
+              </>)}</>) : (<> {filteredProducts.map((item) => (
+                   <div className="col-lg-4 col-md-6 col-sm-6 pb-1">
+                   <div className="product-item bg-light mb-4">
+                     <div className="product-img position-relative overflow-hidden">
+                       <img
+                         className="img-fluid w-100"
+                         src={item.img?.[0]}
+                         alt=""
+                         style={{ width: 302, height: 302 }}
+                       />
+                       <div className="product-action">
+                         <a className="btn btn-outline-dark btn-square" href="">
+                           <i className="fa fa-shopping-cart" />
+                         </a>
+                         <a className="btn btn-outline-dark btn-square" href="">
+                           <i className="far fa-heart" />
+                         </a>
+                         <Link
+                           className="btn btn-outline-dark btn-square"
+                           to={`/detail/${item._id}`}
+                         >
+                           <i className="fa fa-search" />
+                         </Link>
+                       </div>
+                     </div>
+                     <div className="text-center py-4">
+                       <Link
+                         className="h6 text-decoration-none text-truncate"
+                         to={`/detail/${item._id}`}
+                       >
+                         {item.name}
+                       </Link>
+                       <div className="d-flex align-items-center justify-content-center mt-2">
+                         <h5>{item.price}.000 VNĐ</h5>
+                         <h6 className="text-muted ml-2">
+                           {/* <del>$123.00</del> */}
+                         </h6>
+                       </div>
+ 
+                     </div>
+                   </div>
+                 </div>
+              ))}</>)}
+
+
               <div className="col-12">
                 <nav>
                   <ul className="pagination justify-content-center">
