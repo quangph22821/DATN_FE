@@ -3,6 +3,11 @@ import { productReducer } from "./redux/products.reducer";
 import { CommentReducer } from "./redux/comment.reducer";
 import { categoryReducer } from "./redux/categories.reducer";
 import { SearchReducer } from "./redux/Search.reducer";
+import { originReducer } from "./redux/origin.reducer";
+import { materialReducer } from "./redux/material.reducer";
+import { userReducer } from "./redux/user.reducer";
+import { cartReducer } from "./redux/cart.reducer";
+import { billReducer } from "./redux/bill.reducer";
 
 
 export const store = configureStore({
@@ -10,7 +15,12 @@ export const store = configureStore({
    products: productReducer,
    Comment:CommentReducer,
    categories: categoryReducer,
-   search: SearchReducer
+   search: SearchReducer,
+    origin: originReducer,
+    material: materialReducer,
+    users: userReducer,
+    carts: cartReducer,
+    bills: billReducer,
   },
 });
 
