@@ -1,16 +1,78 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { setSearchTerm } from "../../redux/Search.reducer";
+import { AppDispatch, RootState } from "../../store";
+import { useForm } from "react-hook-form";
+import { fetchCategoriesAll } from "../../redux/categories.reducer";
+import { message } from "antd";
+import { useEffect } from "react";
 
 const Header = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const { handleSubmit } = useForm();
+  const accessToken = localStorage.getItem("accessToken");
+  const { category } = useSelector((state: RootState) => state.categories);
+
+  const fetchCategories = async () => {
+    try {
+      await dispatch(fetchCategoriesAll()).unwrap();
+    } catch (error) {}
+  };
+
+  const onSubmit = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    try {
+      if (accessToken) {
+        await localStorage.clear();
+        message.success({
+          content: "Bạn đã đăng xuất xuất thành công",
+        });
+        navigate("/");
+      } else {
+        message.warning("Bạn phải đăng nhập !!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const onSignin = async () => {
+    try {
+      if (accessToken) {
+        navigate("/profile");
+      } else {
+        navigate("/signin");
+      }
+    } catch (error) {}
+  };
+
+  const onLogout = async () => {
+    try {
+      if (accessToken) {
+        await localStorage.clear();
+        message.success({
+          content: "Bạn đã đăng xuất xuất thành công",
+        });
+        navigate("/");
+      } else {
+        message.warning("Bạn phải đăng nhập !!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const searchTerm = useSelector((state) => state.search.searchTerm);
 
-  const handleSearch = (e:any) => {
+  const handleSearch = (e: any) => {
     dispatch(setSearchTerm(e.target.value));
   };
- console.log(searchTerm);
- 
+  console.log(searchTerm);
+
   return (
     <>
       {/* Topbar Start */}
@@ -18,12 +80,6 @@ const Header = () => {
         <div className="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
           <div className="col-lg-4">
             <a href="" className="text-decoration-none">
-              {/* <span className="h1 text-uppercase text-primary bg-dark px-2">
-                Multi
-              </span>
-              <span className="h1 text-uppercase text-dark bg-primary px-2 ml-n1">
-                Shop
-              </span> */}
               <img
                 src="../../../src/assets/img/logo.png"
                 alt=""
@@ -79,28 +135,22 @@ const Header = () => {
               style={{ width: "calc(100% - 30px)", zIndex: 999 }}
             >
               <div className="navbar-nav w-100">
-                
+                {category.map((item) => (
                   <a href="" className="nav-item nav-link">
-                 
+                    {item.name}
                   </a>
-            
+                ))}
               </div>
             </nav>
           </div>
           <div className="col-lg-9">
             <nav className="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
               <a href="" className="text-decoration-none d-block d-lg-none">
-                {/* <span className="h1 text-uppercase text-dark bg-light px-2">
-                  Multi
-                </span>
-                <span className="h1 text-uppercase text-light bg-primary px-2 ml-n1">
-                  Shop
-                </span> */}
                 <img
-                src="../../../src/assets/img/logo.png"
-                alt=""
-                style={{ height: "100px", width: "250px" }}
-              />
+                  src="../../../src/assets/img/logo.png"
+                  alt=""
+                  style={{ height: "100px", width: "250px" }}
+                />
               </a>
               <button
                 type="button"
@@ -129,17 +179,17 @@ const Header = () => {
                   </Link>
                 </div>
                 <div className="navbar-nav ml-auto py-0 d-none d-lg-block">
-                  <Link to="/signin" className="btn px-0">
+                  <button className="btn px-0" onClick={handleSubmit(onLogout)}>
+                    <span className="fas fa-power-off text-primary" />
+                  </button>
+                  <button
+                    onClick={handleSubmit(onSignin)}
+                    className="btn px-0 ml-3"
+                  >
                     <i className="fas fa-user text-primary" />
-                  </Link>
+                  </button>
                   <Link to="/cart" className="btn px-0 ml-3">
                     <i className="fas fa-shopping-cart text-primary" />
-                    {/* <span
-                      className="badge text-secondary border border-secondary rounded-circle"
-                      style={{ paddingBottom: 2 }}
-                    >
-                      0
-                    </span> */}
                   </Link>
                 </div>
               </div>
