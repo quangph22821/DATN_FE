@@ -9,13 +9,12 @@ import { userReducer } from "./redux/user.reducer";
 import { cartReducer } from "./redux/cart.reducer";
 import { billReducer } from "./redux/bill.reducer";
 
-
 export const store = configureStore({
   reducer: {
-   products: productReducer,
-   Comment:CommentReducer,
-   categories: categoryReducer,
-   search: SearchReducer,
+    products: productReducer,
+    Comment: CommentReducer,
+    categories: categoryReducer,
+    search: SearchReducer,
     origin: originReducer,
     material: materialReducer,
     users: userReducer,
