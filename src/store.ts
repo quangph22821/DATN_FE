@@ -6,6 +6,8 @@ import { categoryReducer } from "./redux/categories.reducer";
 import { userReducer } from "./redux/user.reducer";
 import { cartReducer } from "./redux/cart.reducer";
 import { billReducer } from "./redux/bill.reducer";
+import { CommentReducer } from "./redux/comment.reducer";
+import { SearchReducer } from "./redux/Search.reducer";
 
 export const store = configureStore({
   reducer: {
@@ -14,12 +16,14 @@ export const store = configureStore({
     material: materialReducer,
     categories: categoryReducer,
     users: userReducer,
-    carts:cartReducer,
-    bills: billReducer
+    carts: cartReducer,
+    bills: billReducer,
+    Comment: CommentReducer,
+    search: SearchReducer,
   },
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = typeof store.dispatch;   
+export type AppDispatch = typeof store.dispatch;

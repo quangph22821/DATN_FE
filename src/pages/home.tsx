@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { fetchProductsAll, fetchProductsOne } from "../redux/products.reducer";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
