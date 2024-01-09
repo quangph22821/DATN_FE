@@ -88,3 +88,45 @@ const Signup = () => {
                     {...register("confirmPassword")}
                   />
                 </div>
+
+                <button
+                  type="submit" className="btn btn-warning rounded "
+                // style={{
+                //   backgroundColor: "#0e7ccf",
+                //   border: "none",
+                //   borderRadius: "5px",
+                // }}
+                >
+                  Đăng Kí
+                </button>
+              </form>
+              <Link to="/signin">
+                {" "}
+                <p>
+                  Bạn đã có tài khoản?{" "}
+                  <WrapperTextLight> Đăng Nhập</WrapperTextLight>
+                </p>
+              </Link>
+            </WarapperContainerLeft>
+
+            <WarapperContainerRight>
+              <Image
+                src="https://salt.tikicdn.com/ts/upload/eb/f3/a3/25b2ccba8f33a5157f161b6a50f64a60.png"
+                preview={false}
+                alt="iamge-logo"
+                height="203px"
+                width="203px"
+              />
+              <WrapperTextLight>
+                Mua sắm tại Anime Dragon Ball shop
+              </WrapperTextLight>
+            </WarapperContainerRight>
+          </div>
+        </div>
+
+      </>
+    </>
+  );
+};
+
+export default Signup;
