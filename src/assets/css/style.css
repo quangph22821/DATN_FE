@@ -5005,6 +5005,7 @@ a.badge-dark:focus, a.badge-dark.focus {
 
 .media-body {
   flex: 1;
+  margin-left: 12px;
 }
 
 .list-group {

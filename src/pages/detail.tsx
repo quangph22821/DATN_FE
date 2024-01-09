@@ -1,26 +1,31 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { UserOutlined } from "@ant-design/icons";
+import { Avatar, Modal, Space } from "antd";
 import { useEffect, useState } from "react";
+import Image3D from "../components/image 3D/Image3d";
 import { IProducts } from "../models/products";
-// import { fetchAddToCard } from "../redux/cart.reducer";
 import { Button, Flex, Image, Pagination, Rate, message } from "antd";
 import { getAll, getOne } from "../api/products";
 import { useForm } from "react-hook-form";
-import React from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store";
-import { CommentAll, CommentDelete, FetchCommentCreate } from "../redux/comment.reducer";
+import {
+  CommentAll,
+  CommentDelete,
+  FetchCommentCreate,
+} from "../redux/comment.reducer";
 import { current } from "@reduxjs/toolkit";
 
-const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
+const desc = ["terrible", "bad", "normal", "good", "wonderful"];
 const DetailPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<IProducts>({} as IProducts);
   const dispatch = useDispatch<AppDispatch>();
   const { handleSubmit, register, setValue } = useForm();
-  const [CommentProducts, setCommentProducts] = useState()
-  const [dataComment, setDataComment] = useState([])
+  const [CommentProducts, setCommentProducts] = useState();
+  const [dataComment, setDataComment] = useState([]);
   const [value, setValues] = useState(Number);
-  const [bodyProductCategory, setBodyProductCategory] = useState()
+  const [bodyProductCategory, setBodyProductCategory] = useState();
 
   const fetchProductById = async (_id: any) => {
     try {
@@ -28,20 +33,22 @@ const DetailPage = () => {
       setProduct(data.product);
       // console.log(data.product.categoryId.name);
 
-      setCommentProducts(data.product)
-    } catch (error) { }
+      setCommentProducts(data.product);
+    } catch (error) {}
   };
   const fetchProductCategory = async () => {
-    const { data } = await getAll()
-    const dataProductCategory = data.product
+    const { data } = await getAll();
+    const dataProductCategory = data.product;
     // lọc tất cả products theeo category
-    const ProductCategory = dataProductCategory.filter((item: any) => item?.categoryId?._id === product?.categoryId?._id)
-    setBodyProductCategory(ProductCategory)
-  }
+    const ProductCategory = dataProductCategory.filter(
+      (item: any) => item?.categoryId?._id === product?.categoryId?._id
+    );
+    setBodyProductCategory(ProductCategory);
+  };
 
   const accessToken = localStorage.getItem("accessToken");
   const user = localStorage.getItem("user");
-  const userId = JSON.parse(user)
+  const userId = JSON.parse(user);
 
   ////////// phân trang
 
@@ -51,7 +58,10 @@ const DetailPage = () => {
   // Tính toán dữ liệu cho trang hiện tại
   const indexOfLastProduct = currentPage * pageSize;
   const indexOfFirstProduct = indexOfLastProduct - pageSize;
-  const currentComment = dataComment.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentComment = dataComment.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -60,64 +70,78 @@ const DetailPage = () => {
   //////kết thức phân trang
 
   // đếm comment
-  const countcomment = dataComment.length
+  const countcomment = dataComment.length;
 
   /// form bình luận
   const onsubmit = async (comment: any) => {
-    const productId = CommentProducts
-    const rate = value
-    const body = { comment, productId, userId, rate }
+    const productId = CommentProducts;
+    const rate = value;
+    const body = { comment, productId, userId, rate };
 
     try {
       if (accessToken) {
         // fetchProductById(id);
         // await comments()// gọi lại hiển thị  trc khi comment
-        const data = dispatch(FetchCommentCreate(body)).unwrap()
-        fetchProductById(id)
+        const data = dispatch(FetchCommentCreate(body)).unwrap();
+        fetchProductById(id);
 
-        comments()
-        message.success("bạn đã bình luận thành công")
+        comments();
+        message.success("bạn đã bình luận thành công");
         //khi gửi nó xẽ trở về form trống
-        setValue("comment", "")
+        setValue("comment", "");
       } else {
-        message.warning("bạn cần đăng nhập ")
+        message.warning("bạn cần đăng nhập ");
       }
-
     } catch (error) {
-      message.error("lỗi")
+      message.error("lỗi");
     }
-
-  }
-
+  };
 
   const comments = async () => {
-    const data = await dispatch(CommentAll()).unwrap()
+    const data = await dispatch(CommentAll()).unwrap();
     const data1 = await data.filter((item: any) => {
-      return item.productId[0]?._id === product._id
-    })
+      return item.productId[0]?._id === product._id;
+    });
     //sắp xếp bình theo giờ
-    data1.sort((a: any, b: any) => new Date(b.updatedAt) - new Date(a.updatedAt))
-    setDataComment(data1)
-  }
+    data1.sort(
+      (a: any, b: any) => new Date(b.updatedAt) - new Date(a.updatedAt)
+    );
+    setDataComment(data1);
+  };
   // console.log(dataComment)
   ////xóa comment của tài khoản
   const dele = async (id) => {
     try {
-      await dispatch(CommentDelete(id))
-      comments()
+      await dispatch(CommentDelete(id));
+      comments();
     } catch (error) {
-      console.error('Error deleting comment:', error);
+      console.error("Error deleting comment:", error);
     }
-  }
+  };
   useEffect(() => {
     fetchProductById(id);
-    fetchProductCategory()
-    dele(id)
+    fetchProductCategory();
+    dele(id);
     if (product._id) {
-      comments()
+      comments();
     }
     setValue("productId", product._id);
   }, [product._id, setValue]);
+
+  // xem ảnh 3d
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <>
@@ -167,6 +191,29 @@ const DetailPage = () => {
                   <Image className="w-100 h-100" src={product.img?.[3]} />
                 </div>
               </div>
+              <Button
+                style={{
+                  marginLeft: "190px",
+                  marginTop: "24px",
+                  border: "none",
+                  backgroundColor: "#0e7ccf",
+                  color: "#fff",
+                }}
+                type="primary"
+                onClick={showModal}
+              >
+                Xem ảnh 3D
+              </Button>
+              <Modal
+                title="Ảnh 3D"
+                open={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+              >
+                <p style={{height: "300px"}}>
+                  <Image3D />
+                </p>
+              </Modal>
               <a
                 className="carousel-control-prev"
                 href="#product-carousel"
@@ -318,48 +365,65 @@ const DetailPage = () => {
                 <div className="tab-pane fade" id="tab-pane-3">
                   <div className="row">
                     <div className="col-md-6">
-                      <h4 className="mb-4">1 review for "Product Name"</h4>
-                      {console.log(dataComment)
-                      }
-                      {currentComment.map(comment => (
-                        <><div key={comment.id} className="media mb-">
-                          <img
-                            src="../../src/assets/img/user.jpg"
-                            alt="Image"
-                            className="img-fluid mr-3 mt-1"
-                            style={{ width: 45 }} />
-                          <div className="media-body">
-                            <h6>
-                              {comment?.userId?.name}
-                              <small>
-                                {" "}
-                                - <i>{new Date(comment.updatedAt).toLocaleDateString()}</i>
-                              </small>
-                            </h6>
-                            <div className="text-primary mb-2">
-                              <Rate tooltips={desc} disabled value={comment?.rate} />
-                              <span>{desc[comment.rate - 1]}</span>
+                      <h4 className="mb-4">
+                        Đánh giá cho sản phẩm {product.name}
+                      </h4>
+                      {console.log(dataComment)}
+                      {currentComment.map((comment) => (
+                        <>
+                          <div key={comment.id} className="media mb-">
+                            <Space direction="vertical" size={16}>
+                              <Space wrap size={16}>
+                                {/* <Avatar size={64} icon={<UserOutlined />} /> */}
+                                <Avatar size="large" icon={<UserOutlined />} />
+                                {/* <Avatar icon={<UserOutlined />} /> */}
+                                {/* <Avatar size="small" icon={<UserOutlined />} /> */}
+                              </Space>
+                            </Space>
+                            <div className="media-body">
+                              <h6>
+                                {comment?.userId?.name}
+                                <small>
+                                  {" "}
+                                  -{" "}
+                                  <i>
+                                    {new Date(
+                                      comment.updatedAt
+                                    ).toLocaleDateString()}
+                                  </i>
+                                </small>
+                              </h6>
+                              <div className="text-primary mb-2">
+                                <Rate
+                                  tooltips={desc}
+                                  disabled
+                                  value={comment?.rate}
+                                />
+                                <span>{desc[comment.rate - 1]}</span>
+                              </div>
+                              <p>{comment?.comment?.comment}</p>
                             </div>
-                            <p>{comment?.comment?.comment}</p>
+                            {/* Đặt Pagination ở đây để tính toán số lượng trang đúng */}
                           </div>
-                          {/* Đặt Pagination ở đây để tính toán số lượng trang đúng */}
 
-                        </div>
-                      
                           {userId?._id === comment.userId._id && (
-                            <Flex gap="small" style={{ marginLeft: 400 }} wrap="wrap">
-                              <Button onClick={() => dele(comment?._id)}>xóa bình luận</Button>
-
+                            <Flex
+                              gap="small"
+                              style={{ marginLeft: 400 }}
+                              wrap="wrap"
+                            >
+                              <Button onClick={() => dele(comment?._id)}>
+                                xóa bình luận
+                              </Button>
                             </Flex>
-                          )
-                          }
+                          )}
                         </>
                       ))}
                       <Pagination
                         total={dataComment.length}
                         pageSize={pageSize}
-                        onChange={handlePageChange} />
-
+                        onChange={handlePageChange}
+                      />
                     </div>
                     <div className="col-md-6">
                       <h4 className="mb-4">Để lại đánh giá</h4>
@@ -372,8 +436,18 @@ const DetailPage = () => {
                         <div className="d-flex my-3">
                           <p className="mb-0 mr-2">Đánh giá của bạn * :</p>
                           <div className="text-primary">
-                            <Rate tooltips={desc} onChange={setValues} value={value} />
-                            {value ? <span className="ant-rate-text">{desc[value - 1]}</span> : ''}
+                            <Rate
+                              tooltips={desc}
+                              onChange={setValues}
+                              value={value}
+                            />
+                            {value ? (
+                              <span className="ant-rate-text">
+                                {desc[value - 1]}
+                              </span>
+                            ) : (
+                              ""
+                            )}
                           </div>
                         </div>
                         <div className="form-group">
@@ -381,7 +455,7 @@ const DetailPage = () => {
                           <textarea
                             rows={3}
                             id="message"
-                            {...register('comment')}
+                            {...register("comment")}
                             defaultValue={""}
                             className="form-control"
                           />
@@ -401,7 +475,7 @@ const DetailPage = () => {
             </div>
           </div>
         </div>
-      </div >
+      </div>
       {/* Shop Detail End */}
 
       {/* Products Start */}
@@ -412,48 +486,48 @@ const DetailPage = () => {
         <div className="row px-xl-5">
           <div className="col">
             <div className="d-flex flex-row mb-3">
-              {console.log(bodyProductCategory)
-              }
-              {bodyProductCategory && bodyProductCategory.map(item => (
-                <div className=" me-3 product-item bg-light">
-                  <div className="product-img position-relative overflow-hidden">
-                    <img
-                      className="img-fluid w-100"
-                      src={item.img[0]}
-                      alt=""
-                      style={{ maxWidth: 362, height: 362 }}
-                    />
-                    <div className="product-action">
-                      <a className="btn btn-outline-dark btn-square" href="">
-                        <i className="fa fa-shopping-cart" />
+              {console.log(bodyProductCategory)}
+              {bodyProductCategory &&
+                bodyProductCategory.map((item) => (
+                  <div className=" me-3 product-item bg-light">
+                    <div className="product-img position-relative overflow-hidden">
+                      <img
+                        className="img-fluid w-100"
+                        src={item.img[0]}
+                        alt=""
+                        style={{ maxWidth: 362, height: 362 }}
+                      />
+                      <div className="product-action">
+                        <a className="btn btn-outline-dark btn-square" href="">
+                          <i className="fa fa-shopping-cart" />
+                        </a>
+                        <a className="btn btn-outline-dark btn-square" href="">
+                          <i className="far fa-heart" />
+                        </a>
+                        <a className="btn btn-outline-dark btn-square" href="">
+                          <i className="fa fa-sync-alt" />
+                        </a>
+                        <a className="btn btn-outline-dark btn-square" href="">
+                          <i className="fa fa-search" />
+                        </a>
+                      </div>
+                    </div>
+                    <div className="text-center py-4">
+                      <a
+                        className="h6 text-decoration-none text-truncate"
+                        href=""
+                      >
+                        {item.name}
                       </a>
-                      <a className="btn btn-outline-dark btn-square" href="">
-                        <i className="far fa-heart" />
-                      </a>
-                      <a className="btn btn-outline-dark btn-square" href="">
-                        <i className="fa fa-sync-alt" />
-                      </a>
-                      <a className="btn btn-outline-dark btn-square" href="">
-                        <i className="fa fa-search" />
-                      </a>
+                      <div className="d-flex align-items-center justify-content-center mt-2">
+                        <h5>{item.price}</h5>
+                        <h6 className="text-muted ml-2">
+                          <del>$123.00</del>
+                        </h6>
+                      </div>
                     </div>
                   </div>
-                  <div className="text-center py-4">
-                    <a className="h6 text-decoration-none text-truncate" href="">
-                      {item.name}
-                    </a>
-                    <div className="d-flex align-items-center justify-content-center mt-2">
-                      <h5>{item.price}</h5>
-                      <h6 className="text-muted ml-2">
-                        <del>$123.00</del>
-                      </h6>
-                    </div>
-
-                  </div>
-                </div>
-              ))}
-
-
+                ))}
             </div>
           </div>
         </div>
