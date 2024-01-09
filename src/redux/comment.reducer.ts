@@ -14,7 +14,7 @@ const initalState={
  async(body:any)=>{
     try{
         const {data}= await getAdd(body)
-        // console.log(data.commentAdd);
+        console.log(data.commentAdd);
         
        return data.commentAdd
         
