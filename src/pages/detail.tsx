@@ -28,6 +28,7 @@ const DetailPage = () => {
   const [dataComment, setDataComment] = useState([]);
   const [value, setValues] = useState(Number);
   const [bodyProductCategory, setBodyProductCategory] = useState();
+  const [quantity, setQuantity] = useState(1);
 
   const fetchProductById = async (_id: any) => {
     try {
@@ -36,7 +37,7 @@ const DetailPage = () => {
       // console.log(data.product.categoryId.name);
 
       setCommentProducts(data.product);
-    } catch (error) {}
+    } catch (error) { }
   };
   const fetchProductCategory = async () => {
     const { data } = await getAll();
@@ -150,10 +151,10 @@ const DetailPage = () => {
       message.success("Mời bạn đăng nhập!");
       navigate("/signin");
     } else {
-     await dispatch(addProductToCart(body));
+      await dispatch(addProductToCart(body));
       message.success("Sản phẩm đã được thêm vào giỏ hàng!");
       console.log(body.quantity);
-      
+
     }
   };
 
@@ -224,7 +225,7 @@ const DetailPage = () => {
                 onOk={handleOk}
                 onCancel={handleCancel}
               >
-                <p style={{height: "300px"}}>
+                <p style={{ height: "300px" }}>
                   <Image3D />
                 </p>
               </Modal>
@@ -287,22 +288,37 @@ const DetailPage = () => {
                   style={{ width: 130 }}
                 >
                   <div className="input-group-btn">
-                    <button className="btn btn-primary btn-minus">
+                    {/* <button className="btn btn-primary btn-minus"
+                      onClick={() => setQuantity((pre) => pre - 1)}
+                    >
                       <i className="fa fa-minus" />
-                    </button>
+                    </button> */}
                   </div>
                   <input
-                    type="text"
+                    type="number"
                     className="form-control bg-secondary border-0 text-center"
-                    defaultValue={1}
+                    min={1}
+                    value={quantity}
+                    onChange={(event) =>
+                      setQuantity(Number(event.target.value))
+                    }
                   />
                   <div className="input-group-btn">
-                    <button className="btn btn-primary btn-plus">
+                    {/* <button className="btn btn-primary btn-plus"
+                      onClick={() => setQuantity((pre) => pre + 1)}
+                    >
                       <i className="fa fa-plus" />
-                    </button>
+                    </button> */}
                   </div>
                 </div>
-                <button className="btn btn-primary px-3">
+                <button className="btn btn-primary px-3"
+                onClick={() =>
+                  onHandaleAdd({
+                    productId: String(product?._id),
+                    quantity,
+                  })
+                }
+                >
                   <i className="fa fa-shopping-cart mr-1" /> Thêm vào giỏ hàng
                 </button>
               </div>
