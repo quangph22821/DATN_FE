@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Modal, Space } from "antd";
 import { useEffect, useState } from "react";
@@ -15,9 +15,11 @@ import {
   FetchCommentCreate,
 } from "../redux/comment.reducer";
 import { current } from "@reduxjs/toolkit";
+import { addProductToCart } from "../redux/cart.reducer";
 
 const desc = ["terrible", "bad", "normal", "good", "wonderful"];
 const DetailPage = () => {
+  const navigate = useNavigate()
   const { id } = useParams();
   const [product, setProduct] = useState<IProducts>({} as IProducts);
   const dispatch = useDispatch<AppDispatch>();
@@ -141,6 +143,18 @@ const DetailPage = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  const onHandaleAdd = async (body: any) => {
+    if (!accessToken) {
+      message.success("Mời bạn đăng nhập!");
+      navigate("/signin");
+    } else {
+     await dispatch(addProductToCart(body));
+      message.success("Sản phẩm đã được thêm vào giỏ hàng!");
+      console.log(body.quantity);
+      
+    }
   };
 
   return (
