@@ -1,5 +1,94 @@
 
 const CartPage = () => {
+  const accessToken = localStorage.getItem("accessToken");
+  const dispatch = useDispatch<AppDispatch>();
+  const [products, setProducts] = useState();
+  const fetchData = () => {
+    getCartUser().then(({ data }) =>
+    setProducts(data.cart)
+    )
+  }
+  useEffect(() => {
+    fetchData()
+    
+  }, []);
+  console.log(products);
+
+  // Xóa Product trong giỏ hàng
+  const onHandleDeteleProductCart = async (productId: string) => {
+    await dispatch(deleteProductToCart(productId));
+    message.success("Đã xóa thành công!");
+    fetchData()
+  };
+
+  // Change khi người dùng nhập số lượng vào thẻ input
+  const onHandleChangeQuantity = async (productId: string, quantity: number) => {
+
+    if (!isNaN(quantity)) {
+      const productsUpdate = products?.products?.map((product) =>
+        product.productId._id === productId ? { ...product, quantity } : product
+      );
+
+
+      setProducts({
+        ...products,
+        products: productsUpdate
+      });
+      await dispatch(
+        updateProductToCart({
+          quantity,
+          productId,
+        })
+
+      );
+      fetchData()
+    }
+  };
+
+  // + 1 khi người dùng click cộng
+  const onHandleIncrease = async (productId: string, quantity: number) => {
+    const productsUpdate = products?.products?.map((product) =>
+      product.productId._id === productId
+        ? { ...product, quantity: quantity + 1 }
+        : product
+    );
+    setProducts({
+      ...products,
+      products: productsUpdate
+    });
+    await dispatch(
+      updateProductToCart({
+        quantity: quantity + 1,
+        productId,
+      })
+    );
+    fetchData()
+  };
+
+  // - 1 khi người dùng click trừ
+  const onHandleDecrease = async (productId: string, quantity: number) => {
+    if (quantity > 1) {
+      const productsUpdate = products?.products?.map((product) =>
+        product.productId._id === productId
+          ? { ...product, quantity: quantity - 1 }
+          : product
+      );
+
+      setProducts({
+        ...products,
+        products: productsUpdate
+      });
+      await dispatch(
+        updateProductToCart({
+          quantity: quantity - 1,
+          productId,
+        })
+      );
+      fetchData()
+    }
+  };
+
+
   return (
    <><>
    {/* Breadcrumb Start */}
@@ -82,7 +171,7 @@ const CartPage = () => {
                      </div>
                    </div>
                  </td>
-                 <td className="align-middle">{item?.productId?.price * item?.quantity}.000 VND</td>
+                 <td className="align-middle">{item?.productId?.price * item?.quantity}000 VND</td>
                  <td className="align-middle">
                    <button className="btn btn-sm btn-danger"
                    onClick={() => onHandleDeteleProductCart(item?.productId?._id)}>
