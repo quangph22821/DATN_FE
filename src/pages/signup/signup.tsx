@@ -21,3 +21,70 @@ const Signup = () => {
     }
 
   }
+
+
+  return (
+    <>
+      <>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "#fff",
+            height: "100vh",
+          }}
+        >
+          <div
+            style={{
+              width: "800px",
+              height: "500px",
+              borderRadius: "6px",
+              background: "#fff",
+              display: "flex",
+            }}
+            className="shadow-2xl"
+          >
+            <WarapperContainerLeft>
+              <h1
+                style={{
+                  marginLeft: "10px",
+                  marginTop: "5px",
+                  textAlign: "center",
+                  fontSize: "25px",
+                  fontFamily: "-moz-initial",
+                  fontStyle: "bold",
+                }}
+                className="my-6"
+              >
+                ĐĂNG KÍ
+              </h1>
+              <form onSubmit={handleSubmit(onSignup)}>
+
+                <div className="form-group ">
+                  <label >Tên của bạn</label>
+                  <input type="text" className="form-control rounded" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder=" Tên "
+                    {...register("name")}
+                  />
+
+                </div>
+                <div className="form-group ">
+                  <label >Email của bạn</label>
+                  <input type="email" className="form-control rounded" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email"
+                    {...register("email")}
+                  />
+
+                </div>
+                <div className="form-group">
+                  <label >Mật khẩu</label>
+                  <input type="password" className="form-control rounded" id="exampleInputPassword1" placeholder="Mật khẩu "
+                    {...register("password")}
+                  />
+                </div>
+
+                <div className="form-group ">
+                  <label >Xác nhận mật khẩu</label>
+                  <input type="password" className="form-control rounded" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Xác nhận mật khẩu"
+                    {...register("confirmPassword")}
+                  />
+                </div>
