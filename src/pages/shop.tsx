@@ -3,7 +3,7 @@ import { AppDispatch, RootState } from "../store";
 import { fetchProductsAll, fetchProductsOne } from "../redux/products.reducer";
 import { AsyncThunkAction, Dispatch, AnyAction } from "@reduxjs/toolkit";
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Pagination } from "antd";
 import { fetchCategoriesAll } from "../redux/categories.reducer";
 import { useForm } from "react-hook-form";
@@ -17,18 +17,35 @@ const ShopPage = () => {
   const { product } = useSelector((state: RootState) => state.products);
   const { handleSubmit, register, setValue } = useForm();
   const [products, setproducts] = useState<IProducts>({} as IProducts);
+  /// search
+  const searchTerm = useSelector((state) => state.search.searchTerm);
+  const [search, setsearch] = useState([]);
+  const [checkAll, setcheckAll] = useState(true)
+  // Lọc sản phẩm theo searchTerm
+  const filteredProducts = useMemo(() =>
+    product.filter((product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    ), [product, searchTerm]);
+
+  // Set giá trị cho search bằng mảng filteredProducts
+
+
+
+
 
 
   /// phân trang
 
   const pageSize = 6; // Số sản phẩm trên mỗi trang
   const [currentPage, setCurrentPage] = useState(1);
+
+
   // Tính toán dữ liệu cho trang hiện tại
   const indexOfLastProduct = currentPage * pageSize;
   const indexOfFirstProduct = indexOfLastProduct - pageSize;
   const currentProducts = product.slice(indexOfFirstProduct, indexOfLastProduct);
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (page: any) => {
     setCurrentPage(page);
   };
   //kết thúc phântrang
@@ -39,6 +56,12 @@ const ShopPage = () => {
     setproducts(product);
     // console.log(products);
   };
+  useEffect(() => {
+    setsearch(filteredProducts)
+    if (search.length > 0) {
+      setcheckAll(false)
+    }
+  }, [filteredProducts])
 
   const fetchProducts = async () => {
     try {
@@ -80,40 +103,15 @@ const ShopPage = () => {
   /// nếu có tatats cả sản phẩm thì không hiển thị theo danh sách và ngược lại
   const [check, setcheck] = useState(true)
 
-  /// nếu có tatats cả sản phẩm thì không hiển thị theo tìm kiếm và ngược lại
-  const [checkAll, setcheckAll] = useState(true)
 
-
-
-  /// search
-  const searchTerm = useSelector((state) => state.search.searchTerm);
-  const [search, setsearch] = useState()
-  // Lọc sản phẩm theo searchTerm
-
-    const filteredProducts =  product.filter((product) =>{
-      return   product.name.toLowerCase().includes(searchTerm.toLowerCase())
-    }
-    )
-
-// Chỉ gọi setcheckAll khi giá trị thay đổi
-useEffect(() => {
-  if (filteredProducts.length > 0) {
-    setcheckAll(false);
-  } else {
-    setcheckAll(true);
-  }
-}, [filteredProducts]); // Phải cung cấp mảng dependency để chỉ gọi useEffect khi giá trị thay đổi
-
- console.log(checkAll);
- 
- 
-
-  useEffect(() => { 
+  // Phải cung cấp mảng dependency để chỉ gọi useEffect khi giá trị thay đổi
+  useEffect(() => {
     fetchProductById(_id);
     fetchProducts();
     fetchCategories();
     setValue("productId", products._id);
-  },[products._id, setValue]);
+
+  }, [products._id, setValue]);
   // if (minh.length > 1) {
   //   setcheckAll(true);
   // } else {
@@ -121,8 +119,13 @@ useEffect(() => {
   // }
   // console.log(search);
 
+  console.log(filteredProducts);
+  console.log(currentProducts);
+  console.log(search);
 
-  
+
+
+
   const accessToken = localStorage.getItem("accessToken");
   return (
     <>
@@ -313,8 +316,9 @@ useEffect(() => {
           {/* Shop Product Start */}
           <div className="col-lg-9 col-md-8">
             <div className="row pb-3">
-              {checkAll ? (<>{check ? (<> {currentProducts.map((item) => (
-                <div className="col-lg-4 col-md-6 col-sm-6 pb-1">
+
+            {check ? (<>{checkAll ? (<> {currentProducts.map((item) => (
+                <div className="col-lg-4 col-md-6 col-sm-6 pb-1" key={item._id}>
                   <div className="product-item bg-light mb-4">
                     <div className="product-img position-relative overflow-hidden">
                       <img
@@ -355,6 +359,7 @@ useEffect(() => {
                     </div>
                   </div>
                 </div>
+
               ))}
                 <Pagination style={{ margin: "auto" }}
                   total={product.length}
@@ -362,8 +367,53 @@ useEffect(() => {
                   onChange={handlePageChange}
 
                 />
-              </>) : (<> {cate.map((item) => (
-                <><div className="col-lg-4 col-md-6 col-sm-6 pb-1">
+              </>) : (<> {search.map((item) => (
+                <div className="col-lg-4 col-md-6 col-sm-6 pb-1" key={item._id}>
+                  <div className="product-item bg-light mb-4">
+                    <div className="product-img position-relative overflow-hidden">
+                      <img
+                        className="img-fluid w-100"
+                        src={item.img?.[0]}
+                        alt=""
+                        style={{ width: 302, height: 302 }}
+                      />
+                      <div className="product-action">
+                        <a className="btn btn-outline-dark btn-square" href="">
+                          <i className="fa fa-shopping-cart" />
+                        </a>
+                        <a className="btn btn-outline-dark btn-square" href="">
+                          <i className="far fa-heart" />
+                        </a>
+                        <Link
+                          className="btn btn-outline-dark btn-square"
+                          to={`/detail/${item._id}`}
+                        >
+                          <i className="fa fa-search" />
+                        </Link>
+                      </div>
+                    </div>
+                    <div className="text-center py-4">
+                      <Link
+                        className="h6 text-decoration-none text-truncate"
+                        to={`/detail/${item._id}`}
+                      >
+                        {item.name}
+                      </Link>
+                      <div className="d-flex align-items-center justify-content-center mt-2">
+                        <h5>{item.price}.000 VNĐ</h5>
+                        <h6 className="text-muted ml-2">
+                          {/* <del>$123.00</del> */}
+                        </h6>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+              ))}
+
+              </>)}</>) : (<> {cate.map((item) => (
+                <><div className="col-lg-4 col-md-6 col-sm-6 pb-1" key={item._id}>
                   <div className="product-item bg-light mb-4">
                     <div className="product-img position-relative overflow-hidden">
                       <img
@@ -397,7 +447,7 @@ useEffect(() => {
                       <div className="d-flex align-items-center justify-content-center mt-2">
                         <h5>{item.price}.000 VNĐ</h5>
                         <h6 className="text-muted ml-2">
-                          {/* <del>$123.00</del> */}
+                          <del>$123.00</del>
                         </h6>
                       </div>
                       <div className="d-flex align-items-center justify-content-center mb-1">
@@ -417,49 +467,7 @@ useEffect(() => {
                   total={cate.length}
                   pageSize={pageSize}
                   onChange={handlePageChange} />
-              </>)}</>) : (<> {filteredProducts.map((item) => (
-                   <div className="col-lg-4 col-md-6 col-sm-6 pb-1">
-                   <div className="product-item bg-light mb-4">
-                     <div className="product-img position-relative overflow-hidden">
-                       <img
-                         className="img-fluid w-100"
-                         src={item.img?.[0]}
-                         alt=""
-                         style={{ width: 302, height: 302 }}
-                       />
-                       <div className="product-action">
-                         <a className="btn btn-outline-dark btn-square" href="">
-                           <i className="fa fa-shopping-cart" />
-                         </a>
-                         <a className="btn btn-outline-dark btn-square" href="">
-                           <i className="far fa-heart" />
-                         </a>
-                         <Link
-                           className="btn btn-outline-dark btn-square"
-                           to={`/detail/${item._id}`}
-                         >
-                           <i className="fa fa-search" />
-                         </Link>
-                       </div>
-                     </div>
-                     <div className="text-center py-4">
-                       <Link
-                         className="h6 text-decoration-none text-truncate"
-                         to={`/detail/${item._id}`}
-                       >
-                         {item.name}
-                       </Link>
-                       <div className="d-flex align-items-center justify-content-center mt-2">
-                         <h5>{item.price}.000 VNĐ</h5>
-                         <h6 className="text-muted ml-2">
-                           {/* <del>$123.00</del> */}
-                         </h6>
-                       </div>
- 
-                     </div>
-                   </div>
-                 </div>
-              ))}</>)}
+              </>)}
 
 
               <div className="col-12">

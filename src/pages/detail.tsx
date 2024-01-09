@@ -67,21 +67,21 @@ const DetailPage = () => {
     const productId = CommentProducts
     const rate = value
     const body = { comment, productId, userId, rate }
-    console.log(body);
-    try {
-      // if (accessToken) {
-      // fetchProductById(id);
-      // await comments()// gọi lại hiển thị  trc khi comment
-      const data = dispatch(FetchCommentCreate(body)).unwrap()
-      fetchProductById(id)
 
-      comments()
-      message.success("bạn đã bình luận thành công")
-      //khi gửi nó xẽ trở về form trống
-      setValue("comment", "")
-      // } else {
-      //   message.warning("bạn cần đăng nhập ")
-      // }
+    try {
+      if (accessToken) {
+        // fetchProductById(id);
+        // await comments()// gọi lại hiển thị  trc khi comment
+        const data = dispatch(FetchCommentCreate(body)).unwrap()
+        fetchProductById(id)
+
+        comments()
+        message.success("bạn đã bình luận thành công")
+        //khi gửi nó xẽ trở về form trống
+        setValue("comment", "")
+      } else {
+        message.warning("bạn cần đăng nhập ")
+      }
 
     } catch (error) {
       message.error("lỗi")
@@ -319,7 +319,8 @@ const DetailPage = () => {
                   <div className="row">
                     <div className="col-md-6">
                       <h4 className="mb-4">1 review for "Product Name"</h4>
-
+                      {console.log(dataComment)
+                      }
                       {currentComment.map(comment => (
                         <><div key={comment.id} className="media mb-">
                           <img
@@ -344,9 +345,10 @@ const DetailPage = () => {
                           {/* Đặt Pagination ở đây để tính toán số lượng trang đúng */}
 
                         </div>
-                          {userId._id === comment.userId._id && (
+                      
+                          {userId?._id === comment.userId._id && (
                             <Flex gap="small" style={{ marginLeft: 400 }} wrap="wrap">
-                              <Button onClick={() => dele(comment._id)}>xóa bình luận</Button>
+                              <Button onClick={() => dele(comment?._id)}>xóa bình luận</Button>
 
                             </Flex>
                           )
@@ -410,6 +412,8 @@ const DetailPage = () => {
         <div className="row px-xl-5">
           <div className="col">
             <div className="d-flex flex-row mb-3">
+              {console.log(bodyProductCategory)
+              }
               {bodyProductCategory && bodyProductCategory.map(item => (
                 <div className=" me-3 product-item bg-light">
                   <div className="product-img position-relative overflow-hidden">
