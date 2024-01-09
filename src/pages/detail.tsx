@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Modal, Space } from "antd";
 import { useEffect, useState } from "react";
@@ -15,9 +15,11 @@ import {
   FetchCommentCreate,
 } from "../redux/comment.reducer";
 import { current } from "@reduxjs/toolkit";
+import { addProductToCart } from "../redux/cart.reducer";
 
 const desc = ["terrible", "bad", "normal", "good", "wonderful"];
 const DetailPage = () => {
+  const navigate = useNavigate()
   const { id } = useParams();
   const [product, setProduct] = useState<IProducts>({} as IProducts);
   const dispatch = useDispatch<AppDispatch>();
@@ -26,6 +28,7 @@ const DetailPage = () => {
   const [dataComment, setDataComment] = useState([]);
   const [value, setValues] = useState(Number);
   const [bodyProductCategory, setBodyProductCategory] = useState();
+  const [quantity, setQuantity] = useState(1);
 
   const fetchProductById = async (_id: any) => {
     try {
@@ -34,7 +37,7 @@ const DetailPage = () => {
       // console.log(data.product.categoryId.name);
 
       setCommentProducts(data.product);
-    } catch (error) {}
+    } catch (error) { }
   };
   const fetchProductCategory = async () => {
     const { data } = await getAll();
@@ -113,6 +116,7 @@ const DetailPage = () => {
   const dele = async (id) => {
     try {
       await dispatch(CommentDelete(id));
+      message.success("Bạn xóa bình luận thành công")
       comments();
     } catch (error) {
       console.error("Error deleting comment:", error);
@@ -141,6 +145,18 @@ const DetailPage = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  const onHandaleAdd = async (body: any) => {
+    if (!accessToken) {
+      message.success("Mời bạn đăng nhập!");
+      navigate("/signin");
+    } else {
+      await dispatch(addProductToCart(body));
+      message.success("Sản phẩm đã được thêm vào giỏ hàng!");
+      console.log(body.quantity);
+
+    }
   };
 
   return (
@@ -210,7 +226,7 @@ const DetailPage = () => {
                 onOk={handleOk}
                 onCancel={handleCancel}
               >
-                <p style={{height: "300px"}}>
+                <p style={{ height: "300px" }}>
                   <Image3D />
                 </p>
               </Modal>
@@ -273,22 +289,37 @@ const DetailPage = () => {
                   style={{ width: 130 }}
                 >
                   <div className="input-group-btn">
-                    <button className="btn btn-primary btn-minus">
+                    {/* <button className="btn btn-primary btn-minus"
+                      onClick={() => setQuantity((pre) => pre - 1)}
+                    >
                       <i className="fa fa-minus" />
-                    </button>
+                    </button> */}
                   </div>
                   <input
-                    type="text"
+                    type="number"
                     className="form-control bg-secondary border-0 text-center"
-                    defaultValue={1}
+                    min={1}
+                    value={quantity}
+                    onChange={(event) =>
+                      setQuantity(Number(event.target.value))
+                    }
                   />
                   <div className="input-group-btn">
-                    <button className="btn btn-primary btn-plus">
+                    {/* <button className="btn btn-primary btn-plus"
+                      onClick={() => setQuantity((pre) => pre + 1)}
+                    >
                       <i className="fa fa-plus" />
-                    </button>
+                    </button> */}
                   </div>
                 </div>
-                <button className="btn btn-primary px-3">
+                <button className="btn btn-primary px-3"
+                onClick={() =>
+                  onHandaleAdd({
+                    productId: String(product?._id),
+                    quantity,
+                  })
+                }
+                >
                   <i className="fa fa-shopping-cart mr-1" /> Thêm vào giỏ hàng
                 </button>
               </div>
