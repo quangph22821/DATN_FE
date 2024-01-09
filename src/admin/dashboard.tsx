@@ -9,7 +9,7 @@ const DashboardPage = () => {
 
   useEffect(() => {
     if (!accessRole) {
-      message.warning("bạn cần phải đăng nhập !");
+      message.warning("Bạn cần phải đăng nhập !");
       navigate("/signin");
     }
     if (accessRole == "member") {
@@ -17,7 +17,7 @@ const DashboardPage = () => {
       navigate("/signin");
     }
     if (accessRole == "admin") {
-      message.success("xin chào admin !");
+     
       navigate("/admin");
     }
   }, [accessRole, navigate]);

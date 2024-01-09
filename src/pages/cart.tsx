@@ -221,7 +221,7 @@ const CartPage = () => {
               <div className="pt-2">
                 <div className="d-flex justify-content-between mt-2">
                   <h5>Tổng thu</h5>
-                  <h5>{products?.totalOrder}</h5>
+                  <h5>{products?.totalOrder}000VND</h5>
                 </div>
                 <Link to="/checkout">
                   <button className="btn btn-block btn-primary font-weight-bold my-3 py-3">
