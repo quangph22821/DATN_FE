@@ -1,6 +1,6 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import type { MenuProps } from "antd";
-import { Breadcrumb, Layout, Menu, theme } from "antd";
+import { Breadcrumb, Layout, Menu, theme, Button } from "antd";
 import {
   ShoppingCartOutlined,
   HomeOutlined,
@@ -9,9 +9,17 @@ import {
   UserOutlined,
   BorderlessTableOutlined,
   AppstoreOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
 
-const { Header, Content, Sider } = Layout;
+const { Header, Content, Footer, Sider } = Layout;
+
+
+const handleLogout = () => {
+  const navigate = useNavigate();
+  localStorage.removeItem("accessToken");
+  navigate("/"); // Chuyển hướng về trang chính
+};
 
 const items2: MenuProps["items"] = [
   {
@@ -47,21 +55,47 @@ const items2: MenuProps["items"] = [
   {
     key: "sub7",
     icon: <ShoppingCartOutlined />,
-    label: <Link to={"/admin/listCate"}>Quản lý đơn hàng</Link>,
+    label: <Link to={"/admin/listBill"}>Quản lý đơn hàng</Link>,
+  },
+  {
+    key: "sub8",
+    icon: <LogoutOutlined />,
+    label: (
+      <Button type="link" onClick={handleLogout}>
+        Đăng Xuất
+      </Button>
+    ),
   },
 ];
 
 const HeaderAdmin = () => {
+  const navigate = useNavigate();
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
   return (
+    
     <Layout>
-      <Header style={{ display: "flex", alignItems: "center" }}>
-        <div className="demo-logo" />
+      <Header
+        style={{
+          display: "flex",
+          alignItems: "center",
+          background: "#001529", // Màu nền Header
+          padding: "0 20px", // Khoảng cách giữa nội dung và mép của Header
+        }}
+      >
+        <div className="logo-container">
+          <img src="../../../src/assets/img/logo.png" alt="Logo" height="40" />
+        </div>
       </Header>
       <Layout>
-        <Sider width={200} style={{ background: colorBgContainer }}>
+        <Sider
+          width={200}
+          style={{
+            background: colorBgContainer,
+          }}
+        >
           <Menu
             mode="inline"
             defaultSelectedKeys={["1"]}
@@ -73,8 +107,6 @@ const HeaderAdmin = () => {
         <Layout style={{ padding: "0 24px 24px" }}>
           <Breadcrumb style={{ margin: "16px 0" }}>
             <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
           </Breadcrumb>
           <Content
             style={{
