@@ -9,7 +9,7 @@ import BillPage from "./pages/bill";
 import ContactPage from "./pages/contact";
 import CheckoutPage from "./pages/checkout";
 import ProfilePage from "./pages/profile";
-import Signup from "./pages/signup/signup";
+// import Signup from "./pages/signup/signup";
 import Signin from "./pages/signin/signin";
 import HistoryPage from "./pages/history";
 const router = createBrowserRouter([
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
       { path: "/about", element: <AboutPage /> },
       { path: "/checkout", element: <CheckoutPage /> },
       { path: "/signin", element: <Signin /> },
-      { path: "/signup", element: <Signup /> },
+      // { path: "/signup", element: <Signup /> },
       { path: "/profile", element: <ProfilePage /> },
       { path: "/bills/user/:id", element: <HistoryPage /> },
     ],
