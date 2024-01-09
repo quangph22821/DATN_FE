@@ -17,7 +17,6 @@ const DashboardPage = () => {
       navigate("/signin");
     }
     if (accessRole == "admin") {
-     
       navigate("/admin");
     }
   }, [accessRole, navigate]);

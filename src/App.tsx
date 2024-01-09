@@ -15,6 +15,7 @@ import HistoryPage from "./pages/history";
 import AdminLayout from "./components/layout/AdminLayout";
 import DashboardPage from "./admin/dashboard";
 import ListUsersPage from "./admin/users/listUsers";
+import Signup from "./pages/signup/signup";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
       { path: "/about", element: <AboutPage /> },
       { path: "/checkout", element: <CheckoutPage /> },
       { path: "/signin", element: <Signin /> },
-      // { path: "/signup", element: <Signup /> },
+      { path: "/signup", element: <Signup /> },
       { path: "/profile", element: <ProfilePage /> },
       { path: "/bills/user/:id", element: <HistoryPage /> },
     ],

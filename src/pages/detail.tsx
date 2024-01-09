@@ -116,7 +116,6 @@ const DetailPage = () => {
   const dele = async (id) => {
     try {
       await dispatch(CommentDelete(id));
-      message.success("Bạn xóa bình luận thành công")
       comments();
     } catch (error) {
       console.error("Error deleting comment:", error);
