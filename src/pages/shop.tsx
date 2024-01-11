@@ -237,7 +237,7 @@ const ShopPage = () => {
 
             {/* Size Start */}
             <h5 className="section-title position-relative text-uppercase mb-3">
-              <span className="bg-secondary pr-3">Lọc theo chất liệu</span>
+              <span className="bg-secondary pr-3">Lọc theo giá sản phẩm</span>
             </h5>
             <div className="bg-light p-4 mb-30">
               <form>
@@ -316,8 +316,7 @@ const ShopPage = () => {
           {/* Shop Product Start */}
           <div className="col-lg-9 col-md-8">
             <div className="row pb-3">
-
-            {check ? (<>{checkAll ? (<> {currentProducts.map((item) => (
+              {check ? (<>{checkAll ? (<> {currentProducts.map((item) => (
                 <div className="col-lg-4 col-md-6 col-sm-6 pb-1" key={item._id}>
                   <div className="product-item bg-light mb-4">
                     <div className="product-img position-relative overflow-hidden">
@@ -361,12 +360,18 @@ const ShopPage = () => {
                 </div>
 
               ))}
-                <Pagination style={{ margin: "auto" }}
-                  total={product.length}
-                  pageSize={pageSize}
-                  onChange={handlePageChange}
-
-                />
+                <div className="col-12">
+                  <nav>
+                    <ul className="pagination justify-content-center">
+                      <Pagination
+                        current={currentPage}
+                        total={product.length}
+                        pageSize={pageSize}
+                        onChange={handlePageChange}
+                      />
+                    </ul>
+                  </nav>
+                </div>
               </>) : (<> {search.map((item) => (
                 <div className="col-lg-4 col-md-6 col-sm-6 pb-1" key={item._id}>
                   <div className="product-item bg-light mb-4">
@@ -420,8 +425,7 @@ const ShopPage = () => {
                         className="img-fluid w-100"
                         src={item.img?.[0]}
                         alt=""
-                        width={362}
-                        height={362} />
+                        style={{ width: 302, height: 302 }} />
                       <div className="product-action">
                         <a className="btn btn-outline-dark btn-square" href="">
                           <i className="fa fa-shopping-cart" />
@@ -447,26 +451,26 @@ const ShopPage = () => {
                       <div className="d-flex align-items-center justify-content-center mt-2">
                         <h5>{item.price}.000 VNĐ</h5>
                         <h6 className="text-muted ml-2">
-                          <del>$123.00</del>
+                         
                         </h6>
                       </div>
-                      <div className="d-flex align-items-center justify-content-center mb-1">
-                        <small className="fa fa-star text-primary mr-1" />
-                        <small className="fa fa-star text-primary mr-1" />
-                        <small className="fa fa-star text-primary mr-1" />
-                        <small className="fa fa-star text-primary mr-1" />
-                        <small className="fa fa-star text-primary mr-1" />
-                        <small>(99)</small>
-                      </div>
+                     
                     </div>
                   </div>
                 </div></>
               ))}
-                <Pagination
-                  current={currentPage}
-                  total={cate.length}
-                  pageSize={pageSize}
-                  onChange={handlePageChange} />
+             <div className="col-12">
+                  <nav>
+                    <ul className="pagination justify-content-center">
+                      <Pagination
+                        current={currentPage}
+                        total={cate.length}
+                        pageSize={pageSize}
+                        onChange={handlePageChange}
+                      />
+                    </ul>
+                  </nav>
+                </div>
               </>)}
 
 
