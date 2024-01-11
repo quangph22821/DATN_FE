@@ -11,6 +11,7 @@ const CreateCategory = () => {
   const dispatch = useDispatch<AppDispatch>();
   const {
     register,
+
     handleSubmit,
     formState: { errors },
   } = useForm();
@@ -22,7 +23,9 @@ const CreateCategory = () => {
       navigate("/admin/listCate");
 
       console.log(body);
-    } catch (error) { /* empty */ }
+    } catch (error) {
+      /* empty */
+    }
   };
 
   const uploadFiles = async (files: FileList): Promise<string[]> => {
@@ -94,7 +97,7 @@ const CreateCategory = () => {
                         <button
                           type="submit"
                           className="btn btn-success bg-green-600 color-while mx-3"
-                          style={{marginRight: 5}}
+                          style={{ marginRight: 5 }}
                         >
                           Create
                         </button>

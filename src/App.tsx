@@ -16,6 +16,7 @@ import DashboardPage from "./admin/dashboard";
 import ListUsersPage from "./admin/users/listUsers";
 import Signup from "./pages/signup/signup";
 import ListCategoryPage from "./admin/category/listCategory";
+import CreateCategory from "./admin/category/create";
 const router = createBrowserRouter([
   {
     path: "/",
