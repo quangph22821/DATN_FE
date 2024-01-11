@@ -13,7 +13,6 @@ import AdminLayout from "./components/layout/AdminLayout";
 import DashboardPage from "./admin/dashboard";
 import ListUsersPage from "./admin/users/listUsers";
 import Signup from "./pages/signup/signup";
-import CheckoutPage from "./pages/checkout copy";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -25,7 +24,7 @@ const router = createBrowserRouter([
       { path: "/cart", element: <CartPage /> },
       { path: "/contact", element: <ContactPage /> },
       { path: "/about", element: <AboutPage /> },
-      { path: "/checkout", element: <CheckoutPage /> },
+      // { path: "/checkout", element: <CheckoutPage /> },
       { path: "/signin", element: <Signin /> },
       { path: "/signup", element: <Signup /> },
       { path: "/profile", element: <ProfilePage /> },
