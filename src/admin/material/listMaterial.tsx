@@ -3,13 +3,10 @@ import type { ColumnsType, TableProps } from "antd/es/table";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { RootState } from "../../store";
+import { AppDispatch, RootState } from "../../store";
 import { IMaterial } from "../../models/material";
-import {
+import { fetchMaterialAll, fetchMaterialRemove } from "../../redux/material.reducer";
 
-  fetchMaterialAll,
-  fetchMaterialRemove,
-} from "../../redux/material.reducer";
 
 interface MaterialData extends IMaterial {
   recordKey: string;
@@ -22,7 +19,7 @@ interface DataType {
 
 const ListMaterialPage = () => {
   const { material } = useSelector((state: RootState) => state.material);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(fetchMaterialAll());
   }, []);
