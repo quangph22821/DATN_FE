@@ -9,13 +9,13 @@ import BillPage from "./pages/bill";
 import ContactPage from "./pages/contact";
 import CheckoutPage from "./pages/checkout";
 import ProfilePage from "./pages/profile";
-// import Signup from "./pages/signup/signup";
 import Signin from "./pages/signin/signin";
 import HistoryPage from "./pages/history";
 import AdminLayout from "./components/layout/AdminLayout";
 import DashboardPage from "./admin/dashboard";
 import ListUsersPage from "./admin/users/listUsers";
 import Signup from "./pages/signup/signup";
+import ListCategoryPage from "./admin/category/listCategory";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -47,7 +47,7 @@ const router = createBrowserRouter([
       // { path: "/admin/updatePro/:id", element: <UpdateProducts /> },
 
       // Category
-      // { path: "/admin/listCate", element: <ListCategoryPage /> },
+      { path: "/admin/listCate", element: <ListCategoryPage /> },
       // { path: "/admin/createCate", element: <CreateCategory /> },
       // { path: "/admin/updateCate/:id", element: <UpdateCategory /> },
 
