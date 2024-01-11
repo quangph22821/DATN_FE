@@ -170,7 +170,7 @@ const HomePage = () => {
             <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
               <div className="product-item bg-light mb-4">
                 <div className="product-img position-relative overflow-hidden">
-                  <img className="img-fluid w-100" src={item.img?.[0]} alt="" />
+                  <img className="img-fluid w-100" src={item.img?.[0]} alt="" style={{width:362,height:362}}   />
                   <div className="product-action">
                     <a className="btn btn-outline-dark btn-square" href="">
                       <i className="fa fa-shopping-cart" />
@@ -215,14 +215,7 @@ const HomePage = () => {
                       {/* <del>$123.00</del> */}
                     </h6>
                   </div>
-                  <div className="d-flex align-items-center justify-content-center mb-1">
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small className="fa fa-star text-primary mr-1" />
-                    <small>(99)</small>
-                  </div>
+                 
                 </div>
               </div>
             </div>
