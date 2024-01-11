@@ -1,11 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { AppDispatch } from "../../store";
 import { useDispatch } from "react-redux";
-import { IOrigin } from "../../models/products";
+
 import { useForm } from "react-hook-form";
 import { fetchOriginOne, fetchOriginUpdate } from "../../redux/origin.reducer";
 import { useEffect } from "react";
 import {message} from "antd"
+import { IOrigin } from "../../models/origin";
 
 const UpdateOrigin = () => {
   const navigate = useNavigate()

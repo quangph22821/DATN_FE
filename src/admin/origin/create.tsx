@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../../store";
 import { useForm } from "react-hook-form";
 import { fetchOriginAdd } from "../../redux/origin.reducer";
-import { IOrigin } from "../../models/products";
+
 import { message } from "antd";
+import { IOrigin } from "../../models/origin";
 
 const CreateOrigin = () => {
   const navigate = useNavigate()

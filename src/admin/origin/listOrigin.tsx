@@ -3,7 +3,7 @@ import type { ColumnsType, TableProps } from "antd/es/table";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { RootState } from "../../store";
+import { AppDispatch, RootState } from "../../store";
 import { IOrigin } from "../../models/origin";
 import { fetchOriginAll, fetchOriginRemove } from "../../redux/origin.reducer";
 
@@ -18,7 +18,7 @@ interface DataType {
 
 const ListOriginPage = () => {
   const { origin } = useSelector((state: RootState) => state.origin);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(fetchOriginAll());
   }, []);
