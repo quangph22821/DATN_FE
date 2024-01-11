@@ -16,6 +16,7 @@ import AdminLayout from "./components/layout/AdminLayout";
 import DashboardPage from "./admin/dashboard";
 import ListUsersPage from "./admin/users/listUsers";
 import Signup from "./pages/signup/signup";
+import ListMaterialPage from "./admin/material/listMaterial";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -57,7 +58,7 @@ const router = createBrowserRouter([
       // { path: "/admin/updateOri/:id", element: <UpdateOrigin /> },
 
       // Material
-      // { path: "/admin/listMate", element: <ListMaterialPage /> },
+      { path: "/admin/listMate", element: <ListMaterialPage /> },
       // { path: "/admin/createMate", element: <CreateMaterial /> },
       // { path: "/admin/updateMate/:id", element: <UpdateMaterial /> },
 
