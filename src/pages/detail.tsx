@@ -116,7 +116,6 @@ const DetailPage = () => {
   const dele = async (id) => {
     try {
       await dispatch(CommentDelete(id));
-      message.success("Bạn xóa bình luận thành công")
       comments();
     } catch (error) {
       console.error("Error deleting comment:", error);
@@ -150,7 +149,6 @@ const DetailPage = () => {
   const onHandaleAdd = async (body: any) => {
     if (!accessToken) {
       message.success("Mời bạn đăng nhập!");
-      navigate("/signin");
     } else {
       await dispatch(addProductToCart(body));
       message.success("Sản phẩm đã được thêm vào giỏ hàng!");
