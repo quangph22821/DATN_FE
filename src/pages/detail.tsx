@@ -398,8 +398,8 @@ const DetailPage = () => {
                       <h4 className="mb-4">
                         Đánh giá cho sản phẩm {product.name}
                       </h4>
-                      {console.log(dataComment)}
-                      {currentComment.map((comment) => (
+              
+                      {currentComment&&currentComment.map((comment) => (
                         <>
                           <div key={comment.id} className="media mb-">
                             <Space direction="vertical" size={16}>
@@ -552,7 +552,7 @@ const DetailPage = () => {
                       <div className="d-flex align-items-center justify-content-center mt-2">
                         <h5>{item.price}</h5>
                         <h6 className="text-muted ml-2">
-                          <del>$123.00</del>
+                          
                         </h6>
                       </div>
                     </div>
