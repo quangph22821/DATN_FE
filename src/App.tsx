@@ -48,7 +48,7 @@ const router = createBrowserRouter([
 
       // Category
       { path: "/admin/listCate", element: <ListCategoryPage /> },
-      // { path: "/admin/createCate", element: <CreateCategory /> },
+      { path: "/admin/createCate", element: <CreateCategory /> },
       // { path: "/admin/updateCate/:id", element: <UpdateCategory /> },
 
       // Origin
