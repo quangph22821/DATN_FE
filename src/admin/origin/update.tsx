@@ -1,27 +1,46 @@
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AppDispatch } from "../../store";
+import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
-import { fetchOriginAdd } from "../../redux/origin.reducer";
-import { message } from "antd";
+import { fetchOriginOne, fetchOriginUpdate } from "../../redux/origin.reducer";
+import { useEffect } from "react";
+import {message} from "antd"
 import { IOrigin } from "../../models/origin";
 
-const CreateOrigin = () => {
+const UpdateOrigin = () => {
   const navigate = useNavigate()
+  const {id} = useParams()
+  console.log(id);
   const dispatch = useDispatch<AppDispatch>()
-  const { register, handleSubmit, formState: { errors } } = useForm<IOrigin>()
-  const onSubmit = async (body: any) => {
+  const {register,handleSubmit,formState:{errors}} = useForm<IOrigin>({
+    defaultValues: async () => {
+      if (id) {
+        return await fetchOriginById(id)
+      }
+    }
+  })
+  const onSubmit = async (body:any) => {
     try {
-
-  
-      await dispatch(fetchOriginAdd(body)).unwrap()
-      message.success({ content: "Thêm thành công", key: "add" });
-
-      navigate("/admin/listOri")
+    
+   
+        await dispatch(fetchOriginUpdate(body)).unwrap()
+        message.success({ content: "Cập nhật thành công", key: "update" });
+        navigate("/admin/listOri")
       console.log(body);
-
+      
     } catch (error) { /* empty */ }
   }
+
+  const fetchOriginById = async (id: string) => {
+    const data  = await dispatch (fetchOriginOne(id)).unwrap()
+    return data.origin
+
+  }
+  useEffect(() => {
+    if (id) {
+      fetchOriginById(id)
+    }
+  }, [])
   return (
     <>
       <main role="main" className="main-content">
@@ -32,11 +51,11 @@ const CreateOrigin = () => {
                 <div className="col-md-12">
                   <div className="card shadow mb-4">
                     <div className="card-header">
-                      <strong className="card-title">Create Origin</strong>
+                      <strong className="card-title">Update Origin</strong>
                     </div>
                     <div className="card-body">
-                      <form >
-                        <div className="form" >
+                      <form>
+                        <div className="form">
                           <div className="form-group">
                             <label htmlFor="inputEmail4">Name</label>
                             <input
@@ -48,11 +67,11 @@ const CreateOrigin = () => {
                           </div>
                         </div>
                         <button
-                          type="submit" onClick={handleSubmit(onSubmit)}
+                          type="submit"onClick={handleSubmit(onSubmit)}
                           className="btn btn-success bg-green-600 color-while mx-3"
                           style={{marginRight: 5}}
                         >
-                          Create
+                          Update
                         </button>
                         <button
                           type="reset"
@@ -77,4 +96,4 @@ const CreateOrigin = () => {
   );
 };
 
-export default CreateOrigin;
+export default UpdateOrigin;
