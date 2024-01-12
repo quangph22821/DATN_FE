@@ -15,6 +15,7 @@ import AdminLayout from "./components/layout/AdminLayout";
 import DashboardPage from "./admin/dashboard";
 import ListUsersPage from "./admin/users/listUsers";
 import Signup from "./pages/signup/signup";
+import NotFoundPage from "./pages/notfound";
 
 const router = createBrowserRouter([
   {
