@@ -23,6 +23,7 @@ import CreateOrigin from "./admin/origin/create";
 import UpdateOrigin from "./admin/origin/update";
 import ListMaterialPage from "./admin/material/listMaterial";
 import CreateMaterial from "./admin/material/create";
+import UpdateMaterial from "./admin/material/update";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -66,7 +67,7 @@ const router = createBrowserRouter([
       // Material
       { path: "/admin/listMate", element: <ListMaterialPage /> },
       { path: "/admin/createMate", element: <CreateMaterial /> },
-      // { path: "/admin/updateMate/:id", element: <UpdateMaterial /> },
+      { path: "/admin/updateMate/:id", element: <UpdateMaterial /> },
 
       // Cart
       // { path: "/admin/listCart", element: <ListCartPage /> },
