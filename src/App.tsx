@@ -18,6 +18,7 @@ import Signup from "./pages/signup/signup";
 import ListCategoryPage from "./admin/category/listCategory";
 import CreateCategory from "./admin/category/create";
 import UpdateCategory from "./admin/category/update";
+import ListOriginPage from "./admin/origin/listOrigin";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -54,7 +55,7 @@ const router = createBrowserRouter([
       { path: "/admin/updateCate/:id", element: <UpdateCategory /> },
 
       // Origin
-      // { path: "/admin/listOri", element: <ListOriginPage /> },
+      { path: "/admin/listOri", element: <ListOriginPage /> },
       // { path: "/admin/createOri", element: <CreateOrigin /> },
       // { path: "/admin/updateOri/:id", element: <UpdateOrigin /> },
 
