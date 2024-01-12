@@ -9,13 +9,13 @@ import BillPage from "./pages/bill";
 import ContactPage from "./pages/contact";
 import CheckoutPage from "./pages/checkout";
 import ProfilePage from "./pages/profile";
-// import Signup from "./pages/signup/signup";
 import Signin from "./pages/signin/signin";
 import HistoryPage from "./pages/history";
 import AdminLayout from "./components/layout/AdminLayout";
 import DashboardPage from "./admin/dashboard";
 import ListUsersPage from "./admin/users/listUsers";
 import Signup from "./pages/signup/signup";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -33,6 +33,7 @@ const router = createBrowserRouter([
       { path: "/signup", element: <Signup /> },
       { path: "/profile", element: <ProfilePage /> },
       { path: "/bills/user/:id", element: <HistoryPage /> },
+      { path: "*", element: <NotFoundPage /> },
     ],
   },
   {
