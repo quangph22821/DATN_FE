@@ -8,8 +8,13 @@ import { useForm } from "react-hook-form";
 import { IProducts } from "../models/products";
 import { Button, Modal, message } from "antd";
 import Carousel from "../components/carousel/carousel";
+import { EyeInvisibleOutlined } from "@ant-design/icons"
 
-const HomePage = () => {
+type Props = {
+  ProductSale: IProducts[]
+}
+
+const HomePage = (props: Props) =>{
   const dispatch = useDispatch<AppDispatch>();
   const { product } = useSelector((state: RootState) => state.products);
   const { category } = useSelector((state: RootState) => state.categories);
@@ -223,10 +228,15 @@ const HomePage = () => {
                     <small className="fa fa-star text-primary mr-1" />
                     <small>(99)</small>
                   </div>
+                  {/* <div className="text-base font-normal mb-4 text-gray-400 dark:text-gray-400">
+                                        <span><EyeInvisibleOutlined className='mr-2'/>{product?.views}</span>
+                                    </div> */}
                 </div>
               </div>
-            </div>
-          ))}
+            </div>         
+          ))                 
+          }
+          
         </div>
       </div>
       {/* Products End */}
@@ -300,3 +310,7 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+function fetchAddToCard(body: any): any {
+  throw new Error("Function not implemented.");
+}

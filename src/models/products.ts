@@ -7,6 +7,7 @@ export interface IProducts{
     name:string,
     img:string,
     price:number,
+    views: number,
     description:string
     height:number,
     weight:number,
