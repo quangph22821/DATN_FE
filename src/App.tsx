@@ -22,6 +22,7 @@ import ListOriginPage from "./admin/origin/listOrigin";
 import CreateOrigin from "./admin/origin/create";
 import UpdateOrigin from "./admin/origin/update";
 import ListMaterialPage from "./admin/material/listMaterial";
+import CreateMaterial from "./admin/material/create";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -64,7 +65,7 @@ const router = createBrowserRouter([
 
       // Material
       { path: "/admin/listMate", element: <ListMaterialPage /> },
-      // { path: "/admin/createMate", element: <CreateMaterial /> },
+      { path: "/admin/createMate", element: <CreateMaterial /> },
       // { path: "/admin/updateMate/:id", element: <UpdateMaterial /> },
 
       // Cart
