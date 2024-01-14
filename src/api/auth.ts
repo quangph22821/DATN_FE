@@ -7,3 +7,8 @@ export const signin = (body:any)=>{
 export const signup = (body:any)=>{
     return instance.post("signup",body)
 }
+
+export const ForgotPass = (body:any) => {
+    return instance.post('forgotpassword',body)
+}
+
