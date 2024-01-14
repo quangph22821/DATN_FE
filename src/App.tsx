@@ -24,6 +24,9 @@ import UpdateOrigin from "./admin/origin/update";
 import ListMaterialPage from "./admin/material/listMaterial";
 import CreateMaterial from "./admin/material/create";
 import UpdateMaterial from "./admin/material/update";
+import ListProductsPage from "./admin/products/listProduct";
+import CreateProducts from "./admin/products/createProduct";
+import UpdateProducts from "./admin/products/updateProduct";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -50,9 +53,9 @@ const router = createBrowserRouter([
       { path: "/admin", element: <DashboardPage /> },
 
       // Products
-      // { path: "/admin/listPro", element: <ListProductsPage /> },
-      // { path: "/admin/createPro", element: <CreateProducts /> },
-      // { path: "/admin/updatePro/:id", element: <UpdateProducts /> },
+      { path: "/admin/listPro", element: <ListProductsPage /> },
+      { path: "/admin/createPro", element: <CreateProducts /> },
+      { path: "/admin/updatePro/:id", element: <UpdateProducts /> },
 
       // Category
       { path: "/admin/listCate", element: <ListCategoryPage /> },
