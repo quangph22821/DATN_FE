@@ -238,7 +238,7 @@ const UpdateProducts = () => {
                             />
                           </div>
                         </div>
-                        {/* <div className="form-row">
+                        <div className="form-row">
                           <div className="form-group col-md-6">
                             <label htmlFor="inputEmail4">Trọng lượng</label>
                             <input
@@ -307,7 +307,7 @@ const UpdateProducts = () => {
                               })}
                             </select>
                           </div>
-                        </div> */}
+                        </div>
                         <button
                           type="submit"
                           className="btn btn-success bg-green-600 color-while mx-3"
