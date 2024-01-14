@@ -27,6 +27,8 @@ import UpdateMaterial from "./admin/material/update";
 import ListProductsPage from "./admin/products/listProduct";
 import CreateProducts from "./admin/products/createProduct";
 import UpdateProducts from "./admin/products/updateProduct";
+import ForgotPassword from "./pages/forgotpassword/forgotpassword";
+import UpdatePassword from "./pages/updateUser";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -44,6 +46,8 @@ const router = createBrowserRouter([
       { path: "/signup", element: <Signup /> },
       { path: "/profile", element: <ProfilePage /> },
       { path: "/bills/user/:id", element: <HistoryPage /> },
+      { path: "/forgotpassword", element: <ForgotPassword /> },
+      { path: "/bills/updatePassword/:id", element: <UpdatePassword /> },
     ],
   },
   {
