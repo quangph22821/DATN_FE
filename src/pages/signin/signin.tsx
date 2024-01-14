@@ -65,7 +65,7 @@ const Signin = () => {
               }}
               className="my-6"
             >
-              ĐĂNG KÍ
+              ĐĂNG NHẬP
             </h1>
             <form onSubmit={handleSubmit(onsignin)}>
 

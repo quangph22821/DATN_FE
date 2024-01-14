@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 import { signup } from "../../api/auth";
 import { Link, useNavigate } from "react-router-dom";
@@ -22,6 +21,7 @@ const Signup = () => {
     }
 
   }
+
 
   return (
     <>
@@ -85,10 +85,9 @@ const Signup = () => {
                 <div className="form-group ">
                   <label >Xác nhận mật khẩu</label>
                   <input type="password" className="form-control rounded" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Xác nhận mật khẩu"
-                    {...register("confirmpassword")}
+                    {...register("confirmPassword")}
                   />
                 </div>
-
 
                 <button
                   type="submit" className="btn btn-warning rounded "
