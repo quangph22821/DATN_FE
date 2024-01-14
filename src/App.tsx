@@ -24,6 +24,7 @@ import UpdateOrigin from "./admin/origin/update";
 import ListMaterialPage from "./admin/material/listMaterial";
 import CreateMaterial from "./admin/material/create";
 import UpdateMaterial from "./admin/material/update";
+import ForgotPassword from "./pages/forgotpassword/forgotpassword";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -41,6 +42,7 @@ const router = createBrowserRouter([
       { path: "/signup", element: <Signup /> },
       { path: "/profile", element: <ProfilePage /> },
       { path: "/bills/user/:id", element: <HistoryPage /> },
+      { path: "/forgotpassword", element: <ForgotPassword /> },
     ],
   },
   {
