@@ -5,10 +5,13 @@ import { AppDispatch } from "../store";
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-
+// import dotenv from "dotenv";
+import axios from "axios";
+const REACT_APP_API_PAYMENT = "http://topcode.fun/api/v1/payment/add";
 const CheckoutPage = () => {
   const [products, setProducts] = useState();
   const { handleSubmit, register } = useForm();
+  const [paymentMethod, setPaymentMethod] = useState(""); // Phương thức thanh toán
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const fetchData = () => {
@@ -18,9 +21,54 @@ const CheckoutPage = () => {
     fetchData();
   }, []);
 
+  // ... (Các phần mã khác)
+
   const onSubmit = async (body: any) => {
-    await (checkOut(body));
-    message.success("Bạn đã đặt hàng thành công");
+    try {
+      let response = await checkOut(body);
+      console.log("================== RESPONSE: ", response);
+
+      if (response?.data?.bill) {
+        let total = response.data.bill.totalOrder;
+
+        if (response.data.bill.paymentMethod === "Ví điện tử") {
+          // Nếu là "Ví điện tử", cập nhật state và không tiến hành đặt hàng ngay lúc này
+          setPaymentMethod("Ví điện tử");
+          // Thực hiện thanh toán trực tuyến với các thông tin cần thiết trực tiếp
+          await performOnlinePayment(response.data.bill._id, total, onSuccessPayment);
+        } else {
+          // Phương thức thanh toán không phải là "Ví điện tử", tiến hành đặt hàng bình thường
+          message.success("Bạn đã đặt hàng thành công");
+          navigate("/");
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      message.warning("Bạn cần nhập đầy đủ thông tin")
+    }
+  };
+
+  // Hàm thực hiện thanh toán trực tuyến
+  const performOnlinePayment = async (orderId: string, amount: number) => {
+    // Thực hiện các bước thanh toán trực tuyến tại đây
+    console.log("=============== CALL TT ONLINE: ");
+    let newData = {
+      order_id: orderId,
+      url_return: "http://localhost:5173",
+      amount: amount,
+      service_code: "anime",
+      url_callback: "http://localhost:5173",
+    };
+    let paymentOnline = await axios.post(REACT_APP_API_PAYMENT, newData);
+    console.log("============= paymentOnline", paymentOnline);
+
+    if (paymentOnline.data.link) {
+      window.location.href = paymentOnline.data.link;
+    }
+  };
+
+  const onSuccessPayment = () => {
+    message.success("Bạn đã thanh toán thành công và đặt hàng thành công");
     navigate("/");
   };
 
@@ -49,6 +97,7 @@ const CheckoutPage = () => {
               <h5 className="section-title position-relative text-uppercase mb-3">
                 <span className="bg-secondary pr-3">Địa chỉ thanh toán</span>
               </h5>
+                <p style={{color: "red"}}>*Lưu ý: Khi bạn thanh toán bằng ví điện tử VNPAY, bạn sẽ không thể hủy đơn hàng!</p>
               <div className="bg-light p-30 mb-5">
                 <div className="row">
                   <div className="col-md-6 form-group">
@@ -114,88 +163,6 @@ const CheckoutPage = () => {
                       {...register("shippingAddress")}
                     />
                   </div>
-                  <div className="col-md-12">
-                    <div className="custom-control custom-checkbox">
-                      <input
-                        type="checkbox"
-                        className="custom-control-input"
-                        id="shipto"
-                      />
-                      <label
-                        className="custom-control-label"
-                        htmlFor="shipto"
-                        data-toggle="collapse"
-                        data-target="#shipping-address"
-                      >
-                        Địa chỉ nhận hàng khác
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="collapse mb-5" id="shipping-address">
-                <h5 className="section-title position-relative text-uppercase mb-3">
-                  <span className="bg-secondary pr-3">Địa chỉ giao hàng</span>
-                </h5>
-                <div className="bg-light p-30">
-                  <div className="row">
-                    <div className="col-md-6 form-group">
-                      <label>Tên</label>
-                      <input
-                        className="form-control"
-                        type="text"
-                        placeholder="Văn A"
-                      />
-                    </div>
-                    <div className="col-md-6 form-group">
-                      <label>Email</label>
-                      <input
-                        className="form-control"
-                        type="text"
-                        placeholder="a@gmail.com"
-                      />
-                    </div>
-                    <div className="col-md-6 form-group">
-                      <label>Số điện thoại</label>
-                      <input
-                        className="form-control"
-                        type="text"
-                        placeholder="0987654321"
-                      />
-                    </div>
-                    <div className="col-md-6 form-group">
-                      <label>Tỉnh / Thành phố</label>
-                      <input
-                        className="form-control"
-                        type="text"
-                        placeholder="Tỉnh / Thành phố"
-                      />
-                    </div>
-                    <div className="col-md-6 form-group">
-                      <label>Quận / Huyện</label>
-                      <input
-                        className="form-control"
-                        type="text"
-                        placeholder="Quận/Huyện"
-                      />
-                    </div>
-                    <div className="col-md-6 form-group">
-                      <label>Phường / Xã</label>
-                      <input
-                        className="form-control"
-                        type="text"
-                        placeholder="Phường/Xã"
-                      />
-                    </div>
-                    <div className="col-md form-group">
-                      <label>Địa chỉ cụ thể</label>
-                      <input
-                        className="form-control"
-                        type="text"
-                        placeholder="số 123 đường 345"
-                      />
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -216,19 +183,38 @@ const CheckoutPage = () => {
                 <div className="border-bottom pt-3 pb-2">
                   <div className="d-flex justify-content-between mb-3">
                     <h6>Tổng tiền</h6>
-                    <h6>{products?.totalPrice}</h6>
+                    <h6>
+                      {new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      }).format(products?.totalPrice)}
+                    </h6>
                   </div>
                   <div className="d-flex justify-content-between">
                     <h6 className="font-weight-medium">Vận chuyển</h6>
                     <h6 className="font-weight-medium">
-                      {products?.shippingFee}
+                      {new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      }).format(products?.shippingFee)}
                     </h6>
                   </div>
                 </div>
                 <div className="pt-2">
                   <div className="d-flex justify-content-between mt-2">
                     <h5>Thanh toán</h5>
-                    <h5>{products?.totalOrder}</h5>
+                    <h5>
+                      {new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      }).format(products?.totalOrder)}
+                    </h5>
                   </div>
                 </div>
               </div>
@@ -245,7 +231,7 @@ const CheckoutPage = () => {
                         name="payment"
                         id="paypal"
                         {...register("paymentMethod")}
-                        value="EWallets"
+                        value="Ví điện tử"
                       />
                       <label className="custom-control-label" htmlFor="paypal">
                         Thanh toán qua ví điện tử
@@ -260,31 +246,13 @@ const CheckoutPage = () => {
                         name="payment"
                         id="directcheck"
                         {...register("paymentMethod")}
-                        value="PayOnDelivery"
+                        value="Thanh toán khi nhận hàng"
                       />
                       <label
                         className="custom-control-label"
                         htmlFor="directcheck"
                       >
                         Thanh toán khi nhận hàng
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group mb-4">
-                    <div className="custom-control custom-radio">
-                      <input
-                        type="radio"
-                        className="custom-control-input"
-                        name="payment"
-                        id="banktransfer"
-                        {...register("paymentMethod")}
-                        value="BankTransfer"
-                      />
-                      <label
-                        className="custom-control-label"
-                        htmlFor="banktransfer"
-                      >
-                        Chuyển khoản ngân hàng
                       </label>
                     </div>
                   </div>
