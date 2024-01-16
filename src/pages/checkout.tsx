@@ -35,7 +35,7 @@ const CheckoutPage = () => {
           // Nếu là "Ví điện tử", cập nhật state và không tiến hành đặt hàng ngay lúc này
           setPaymentMethod("Ví điện tử");
           // Thực hiện thanh toán trực tuyến với các thông tin cần thiết trực tiếp
-          await performOnlinePayment(response.data.bill._id, total, onSuccessPayment);
+          await performOnlinePayment(response.data.bill._id, total);
         } else {
           // Phương thức thanh toán không phải là "Ví điện tử", tiến hành đặt hàng bình thường
           message.success("Bạn đã đặt hàng thành công");
@@ -51,7 +51,7 @@ const CheckoutPage = () => {
   // Hàm thực hiện thanh toán trực tuyến
   const performOnlinePayment = async (orderId: string, amount: number) => {
     // Thực hiện các bước thanh toán trực tuyến tại đây
-    console.log("=============== CALL TT ONLINE: ");
+
     let newData = {
       order_id: orderId,
       url_return: "http://localhost:5173",
@@ -67,10 +67,6 @@ const CheckoutPage = () => {
     }
   };
 
-  const onSuccessPayment = () => {
-    message.success("Bạn đã thanh toán thành công và đặt hàng thành công");
-    navigate("/");
-  };
 
   return (
     <>
