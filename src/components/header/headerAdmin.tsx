@@ -1,6 +1,6 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import type { MenuProps } from "antd";
-import { Breadcrumb, Layout, Menu, theme, Button } from "antd";
+import { Breadcrumb, Layout, Menu, theme, Space, Avatar, message } from "antd";
 import {
   ShoppingCartOutlined,
   HomeOutlined,
@@ -9,18 +9,27 @@ import {
   UserOutlined,
   BorderlessTableOutlined,
   AppstoreOutlined,
-  LogoutOutlined,
 } from "@ant-design/icons";
+import { useForm } from "react-hook-form";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 
+const accessToken = localStorage.getItem("accessToken");
 
-const handleLogout = () => {
-  const navigate = useNavigate();
-  localStorage.removeItem("accessToken");
-  navigate("/"); // Chuyển hướng về trang chính
+const onLogout = async () => {
+  console.log(accessToken);
+
+  try {
+    await localStorage.clear();
+    message.success({
+      content: "Bạn đã đăng xuất xuất thành công",
+    });
+    const navigate = useNavigate();
+    navigate("/signin");
+  } catch (error) {
+    console.log(error);
+  }
 };
-
 const items2: MenuProps["items"] = [
   {
     key: "sub1",
@@ -39,55 +48,62 @@ const items2: MenuProps["items"] = [
   },
   {
     key: "sub4",
+    icon: <UnorderedListOutlined />,
+    label: <Link to={"/admin/listComment"}>Quản lý bình luận</Link>,
+  },
+  {
+    key: "sub5",
     icon: <UserOutlined />,
     label: <Link to={"/admin/listUser"}>Quản lý người dùng</Link>,
   },
   {
-    key: "sub5",
+    key: "sub6",
     icon: <BorderlessTableOutlined />,
     label: <Link to={"/admin/listMate"}>Quản lý xuất xứ</Link>,
   },
   {
-    key: "sub6",
+    key: "sub7",
     icon: <AppstoreOutlined />,
     label: <Link to={"/admin/listOri"}>Quản lý chất liệu</Link>,
   },
   {
-    key: "sub7",
+    key: "sub8",
     icon: <ShoppingCartOutlined />,
     label: <Link to={"/admin/listBill"}>Quản lý đơn hàng</Link>,
-  },
-  {
-    key: "sub8",
-    icon: <LogoutOutlined />,
-    label: (
-      <Button type="link" onClick={handleLogout}>
-        Đăng Xuất
-      </Button>
-    ),
   },
 ];
 
 const HeaderAdmin = () => {
-  const navigate = useNavigate();
-
+  const { handleSubmit } = useForm();
   const {
     token: { colorBgContainer },
   } = theme.useToken();
   return (
-    
     <Layout>
       <Header
         style={{
           display: "flex",
           alignItems: "center",
-          background: "#001529", // Màu nền Header
+          background: "#d9d9d9", // Màu nền Header
+          height: "40px",
           padding: "0 20px", // Khoảng cách giữa nội dung và mép của Header
         }}
       >
-        <div className="logo-container">
-          <img src="../../../src/assets/img/logo.png" alt="Logo" height="40" />
-        </div>
+        <Space style={{ marginLeft: "auto" }} direction="vertical" size={16}>
+          <Space wrap size={16}>
+            {/* <Avatar size={64} icon={<UserOutlined />} /> */}
+            {/* <Avatar size="large" icon={<UserOutlined />} /> */}
+            {/* <Avatar icon={<UserOutlined />} /> */}
+            <Avatar size="small" icon={<UserOutlined />} />
+            <span>Admin</span>
+            <button
+              onClick={handleSubmit(onLogout)}
+              style={{ border: "none", background: "#d9d9d9" }}
+            >
+              Đăng xuất
+            </button>
+          </Space>
+        </Space>
       </Header>
       <Layout>
         <Sider

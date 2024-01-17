@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { DatePickerProps, TimePickerProps } from "antd";
 import { DatePicker, Empty, Select, Space, Spin, TimePicker } from "antd";
 import ReactApexChart from "react-apexcharts";
 import Chart from "react-apexcharts";
 import axios from "axios";
+const colors = ['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0'];
+
+
 
 const MyChart = () => {
   const [monthlyPrices, setMonthlyPrices] = useState([]);
@@ -16,18 +19,39 @@ const MyChart = () => {
       },
       xaxis: {
         categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          "07",
+          "08",
+          "09",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
+          "24",
+          "25",
+          "26",
+          "27",
+          "28",
+          "29",
+          "30",
+          "31"
+
+
         ],
       },
     },
@@ -39,28 +63,6 @@ const MyChart = () => {
     ],
   });
 
-  const [datamonthlyPrices, setDatamonthlyPrices] = useState({
-    chart: {
-      height: 450,
-    },
-    xaxis: {
-      categories: [],
-    },
-    yaxis: {
-      title: {
-        text: "Doanh thu (VNĐ)",
-      },
-    },
-    title: {
-      text: "Biểu đồ doanh thu hàng năm",
-      floating: false,
-      align: "center",
-      style: {
-        color: "#444",
-      },
-    },
-  });
-
   const [chartData2, setChartData2] = useState({
     options: {
       chart: {
@@ -68,8 +70,8 @@ const MyChart = () => {
       },
       xaxis: {
         categories: [
-          "2024",
-          "2023",
+          "Jan",
+          "Feb",
           "Mar",
           "Apr",
           "May",
@@ -106,154 +108,116 @@ const MyChart = () => {
   });
 
   const [chartData4, setChartData4] = useState({
+    series: [{
+      data: [21, 22, 10, 28, 16, 21, 13, 30, 14, 9]
+    }],
     options: {
       chart: {
-        id: "bar-chart2",
+        height: 350,
+        type: 'bar',
+        events: {
+          click: function (chart, w, e) {
+            // console.log(chart, w, e)
+          }
+        }
+      },
+      colors: colors,
+      plotOptions: {
+        bar: {
+          columnWidth: '45%',
+          distributed: true,
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      legend: {
+        show: false
       },
       xaxis: {
         categories: [
-          "Category A",
-          "Category B",
-          "Category C",
-          "Category D",
-          "Category E",
+          ['John', 'Doe'],
+          ['Peter', 'Brown'],
+          ['Joe', 'Smith'],
+          ['Jake', 'Williams'],
+          'Amber',
+          ['Peter', 'Brown'],
+          ['Peter', 'Brown'],
+          ['Mary', 'Evans'],
+          ['David', 'Wilson'],
+          ['Lily', 'Roberts'],
         ],
-      },
+        labels: {
+          style: {
+            colors: colors,
+            fontSize: '12px'
+          }
+        }
+      }
     },
-    series: [
-      {
-        name: "Data Set 1",
-        data: [],
-      },
-      {
-        name: "Data Set 2",
-        data: [],
-      },
-    ],
   });
 
-  // THỐNG KÊ DOANH THU TRONG NĂM
-  // const fetchData = async (apiUrl: any) => {
-  //   try {
-  //     const response = await axios.get(apiUrl);
-  //     const apiData = response.data;
-  //     console.log(apiData.data);
-  //     const monthsFromAPI = apiData.data.months;
-  //     const updatedMonthlyPrices = monthsFromAPI?.map(
-  //       (month: any) => month.totalPrice
-  //     );
-  //     const updatedCategories = monthsFromAPI.map(
-  //       (month: any) => `Tháng ${month.month}`
-  //     );
-
-  //     setMonthlyPrices(updatedMonthlyPrices);
-  //     setDatamonthlyPrices((prevState) => ({
-  //       ...prevState,
-  //       xaxis: {
-  //         ...prevState.xaxis,
-  //         categories: updatedCategories,
-  //       },
-  //     }));
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // const onChange: DatePickerProps["onChange"] = (_, dateString) => {
-  //   //console.log(date, dateString);
-  //   if (dateString) {
-  //     const apiUrl = `http://localhost:8080/filter?year=${dateString}`;
-  //     fetchData(apiUrl);
-  //   }
-  // };
-
-  // const [seriesData, setSeriesData] = useState([
-  //   { name: "Total Price", data: [] },
-  // ]);
-  // const [options, setOptions] = useState({
-  //   chart: {
-  //     height: 350,
-  //     // type: 'bar',
-  //   },
-  //   xaxis: {
-  //     categories: [],
-  //   },
-  // });
-
-  // const onChangeDate: DatePickerProps["onChange"] = async (_, dateString) => {
-  //   if (dateString) {
-  //     const month = dateString.split("-")[1];
-
-  //     //console.log(date);
-
-  //     const apiUrl = `http://localhost:8080/filter?year=2024&month=${month}`;
-
-  //     try {
-  //       const response = await axios.get(apiUrl);
-  //       const apiData = response.data.data;
-  //       const updatedSeriesData = apiData.day.map(
-  //         (day: any) => day.totalPrice
-  //       );
-  //       const updatedCategories = apiData.days.map((day: any) => day.day);
-  //       //console.log(updatedSeriesData, updatedCategories);
-
-  //       setSeriesData([{ name: "Total Price", data: updatedSeriesData }]);
-  //       setOptions((prevOptions) => ({
-  //         ...prevOptions,
-  //         xaxis: {
-  //           ...prevOptions.xaxis,
-  //           categories: updatedCategories,
-  //         },
-  //         title: {
-  //           text: "Doanh Thu Các Ngày Trong Tháng",
-  //           floating: false,
-  //           align: "center",
-  //           style: {
-  //             color: "#444",
-  //           },
-  //         },
-  //       }));
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
-  // };
+  
 
   // Hàm fetch dữ liệu từ API
-  const fetchData = async (year) => {
+  const fetchData = async (year: any) => {
     try {
       setLoading(true);
 
       // Gọi API để lấy dữ liệu doanh thu cho năm được chọn
-      const response = await axios.get(`http://localhost:8080/filter?year=${year}`);
-      const apiData = response.data.totalPrice;
-      console.log(apiData);
-      
+      const response = await axios.get(`http://localhost:8080/byyear?selectedYear=${year}`);
+      const apiData = response.data.monthlyTotalPrices;
+      console.log("apiYear", apiData);
 
-      // Cập nhật dữ liệu và options cho biểu đồ hàng tháng
-      const monthsFromAPI = apiData;
-      console.log(monthsFromAPI);
-      
-      const updatedSeriesData = apiData && apiData.totalPrice; // Kiểm tra xem apiData có tồn tại không
-      setMonthlyPrices(updatedSeriesData);
-      setChartData1((prevState) => ({
-        ...prevState,
-        series: [{ name: "Total Price", data: updatedSeriesData }],
+
+
+      setChartData2((prevChartData: any) => ({
+        ...prevChartData,
+        series: [
+          {
+            ...prevChartData.series[0],
+            data: apiData,
+          },
+        ],
+
       }));
 
-      // Cập nhật dữ liệu và options cho biểu đồ hàng năm
-      const updatedCategories = apiData.map((month) => `Tháng ${month.month}`);
-      setChartData2((prevState) => ({
-        ...prevState,
-        xaxis: {
-          ...prevState.xaxis,
-          categories: updatedCategories,
-        },
-        series: [{ name: "Total Price", data: updatedSeriesData }],
+
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+    } 
+  };
+
+  // CALL API THEO Tháng
+  const fetchDataMonth = async (year: any, month: any) => {
+    try {
+      setLoading(true);
+
+      // Gọi API để lấy dữ liệu doanh thu cho năm được chọn
+      const response = await axios.get(`http://localhost:8080/bymonth?selectedYear=${year}&selectedMonth=${month}`);
+      const apiData = response.data.dailyTotalPrices;
+      console.log("apiMonth", apiData);
+
+      setChartData1((prevChartData: any) => ({
+        ...prevChartData,
+        series: [
+          {
+            ...prevChartData.series[0],
+            data: apiData,
+          },
+        ],
+        // options: {
+        //   ...prevChartData.options,
+        //   xaxis: {
+        //     ...prevChartData.options.xaxis,
+        //     categories: month,
+        //   },
+        // },
+
       }));
 
-      // Cập nhật dữ liệu và options cho các biểu đồ khác nếu cần
-      // ...
 
       setLoading(false);
     } catch (error) {
@@ -262,6 +226,30 @@ const MyChart = () => {
     }
   };
 
+  // CALL API  THỐNG KÊ ĐẶT HÀNG
+  useEffect(() => {
+    const fetchStatistics = async () => {
+      try {
+        const result = await axios.get("http://localhost:8080/rate");
+        console.log(result.data);
+        const cancelRate = result.data.cancelRate
+        const successRate = result.data.successRate
+        console.log("rate: " + successRate, cancelRate);
+        
+        
+        // Cập nhật giá trị series trong state với dữ liệu mới
+        setChartData3({
+          ...chartData3,
+          series: [successRate || cancelRate],
+        });
+      } catch (error) {
+        console.error('Error fetching statistics:', error.message);
+      }
+    };
+
+    fetchStatistics();
+  }, []);
+
   // Hàm được gọi khi người dùng thay đổi năm trên DatePicker
   const onChangeYear: DatePickerProps["onChange"] = (_, dateString) => {
     if (dateString) {
@@ -269,42 +257,29 @@ const MyChart = () => {
     }
   };
 
+  const onChangeMonth: DatePickerProps['onChange'] = (_, dateString) => {
+    const lastTwoCharacters = dateString.slice(-2);
+    const lastTwoYear = dateString.slice(0, 4);
+    if (lastTwoCharacters && lastTwoYear) {
+      fetchDataMonth(lastTwoYear, lastTwoCharacters)
+    }
+  };
+
   return (
     <div>
-      {/* <div style={{ display: "flex", marginBottom: "20px" }}>
-        <div style={{ flex: 1 }}>
-          <h3>Select Date:</h3>
-          <Space>
-            <Select value={type} onChange={setType}>
-              <Option value="time">Time</Option>
-              <Option value="date">Date</Option>
-              <Option value="week">Week</Option>
-              <Option value="month">Month</Option>
-              <Option value="year">Year</Option>
-            </Select>
-            <PickerWithType
-              type={type}
-              onChange={(value) => console.log(value)}
-            />
-          </Space>
-        </div>
-      </div> */}
       {/* Phần Biểu đồ hàng tháng */}
       <div style={{ display: "flex", marginBottom: "20px" }}>
         <div style={{ flex: 1, marginRight: "10px" }}>
           <div className="flex justify-between">
             <h3 className="text-[30px]">Doanh thu hàng tháng </h3>
-            <DatePicker
-              className="w-[300px] rounded-lg shadow-md"
-              onChange={onChangeYear}
-              picker="year"
-            />
+            <DatePicker onChange={onChangeMonth} picker="month" />
           </div>
           <ReactApexChart
             options={chartData1.options}
             series={chartData1.series}
-            type="bar"
+            type="line"
             height={350}
+            width={475}
           />
         </div>
 
@@ -322,12 +297,13 @@ const MyChart = () => {
             id="chart"
             className="w-[65%] bg-[#ffffff] p-[30px] rounded-md shadow-lg"
           >
-              <ReactApexChart
-                options={chartData2.options}
-                series={chartData2.series}
-                type="area"
-                height={350}
-              />
+            <ReactApexChart
+              options={chartData2.options}
+              series={chartData2.series}
+              type="bar"
+              height={310}
+              width={475}
+            />
           </div>
         </div>
       </div>
@@ -339,6 +315,7 @@ const MyChart = () => {
             series={chartData3.series}
             type="pie"
             height={350}
+            width={475}
           />
         </div>
         <div style={{ flex: 1 }}>
@@ -348,6 +325,7 @@ const MyChart = () => {
             series={chartData4.series}
             type="bar"
             height={350}
+            width={475}
           />
         </div>
       </div>
