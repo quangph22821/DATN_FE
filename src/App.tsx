@@ -30,6 +30,7 @@ import UpdateProducts from "./admin/products/updateProduct";
 import ForgotPassword from "./pages/forgotpassword/forgotpassword";
 import UpdatePassword from "./pages/updateUser";
 import NotFoundPage from "./pages/notFound";
+import UpdateBill from "./admin/bill/updateBill";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -82,7 +83,7 @@ const router = createBrowserRouter([
       
       // Bill
       // { path: "/admin/listBill", element: <ListBillPage /> },
-      // { path: "/admin/updateBill/:id", element: <UpdateBill /> },
+      { path: "/admin/updateBill/:id", element: <UpdateBill /> },
       
       // Users
       { path: "/admin/listUser", element: <ListUsersPage /> },
