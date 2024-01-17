@@ -67,7 +67,7 @@ const UpdateOrigin = () => {
                                 required: "Vui lòng không để trống",
                               }}
                             />
-                            <p className="text-danger">{errors?.price?.message}</p>
+                            <p className="text-danger">{errors?.name?.message}</p>
                           </div>
                         </div>
                         <button
