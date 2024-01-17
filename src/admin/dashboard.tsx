@@ -136,7 +136,7 @@ const DashboardPage = () => {
           </div>
 
           {/* ĐẾM SỐ LƯỢNG NGƯỜI DÙNG  */}
-          {/* <div
+          <div
             style={{
               height: "120px",
               backgroundColor: "#f5f5f5", 
@@ -174,7 +174,7 @@ const DashboardPage = () => {
             >
               {numberOfUsers}
             </span>
-          </div> */}
+          </div>
 
         </div>
       </div>
