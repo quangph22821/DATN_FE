@@ -57,6 +57,8 @@ const UpdateProducts = () => {
       }
     },
   });
+
+  
   const onSubmit = async (body: any) => {
     try {
       const images = await uploadFiles(body.img);
@@ -72,11 +74,11 @@ const UpdateProducts = () => {
 
   const fetchProductById = async (id: string) => {
     const data = await dispatch(fetchProductsOne(id)).unwrap();
-    setDataupdate(data)
+    setDataupdate(data.product)
     return data.product
     
   };
-  
+  console.log("dataupdate",dataUpdate.originId?.name);
   
   useEffect(() => {
     if (id) {
@@ -186,9 +188,13 @@ const UpdateProducts = () => {
                               type="text"
                               className="form-control"
                               id="inputEmail5"
-                              {...register("name")}
-                              // defaultValue={dataUpdate?.product?.name}
+                              {...register("name", {
+                                required:"Bạn cần nhập tên"
+                              })}
+
+                             
                             />
+                            <p className="text-danger">{errors?.name?.message}</p>
                           </div>
                           <div className="form-group col-md-6">
                             <label htmlFor="inputPassword4">Price</label>
@@ -197,14 +203,17 @@ const UpdateProducts = () => {
                               className="form-control"
                               id="inputPassword5"
                               min="0"
-                              {...register("price")}
-                              // defaultValue={dataUpdate?.product?.price}
+                              {...register("price", {
+                                required:"Bạn cần nhập giá"
+                              })}
+                              
                             />
+                            <p className="text-danger">{errors?.price?.message}</p>
                           </div>
                         </div>
                         <div className="form-row">
                           <div className="form-group col-md-6">
-                            <Upload
+                            {/* <Upload
                             name="avatar"
                             listType="picture-card"
                             className="avatar-uploader"
@@ -222,11 +231,10 @@ const UpdateProducts = () => {
                             ) : (
                               uploadButton
                             )}
-                          </Upload>
-                            {/* <label htmlFor="inputAddress">Image</label>
+                          </Upload> */}
+                            <label htmlFor="inputAddress">Image</label>
                             <br />
-                            <input type="file" multiple {...register("img")} /> */}
-                            
+                            <input type="file" multiple {...register("img")} />
                           </div>
                           <div className="form-group col-md-6">
                             <label htmlFor="inputAddress2">Description</label>
@@ -234,8 +242,11 @@ const UpdateProducts = () => {
                               className="form-control"
                               id="inputAddress6"
                               placeholder="Description"
-                              {...register("description")}                              
+                              {...register("description",{
+                                required:"Bạn cần thêm mô tả"
+                              })}                              
                             />
+                            <p className="text-danger">{errors?.description?.message}</p>
                           </div>
                         </div>
                         <div className="form-row">
@@ -246,9 +257,12 @@ const UpdateProducts = () => {
                               className="form-control"
                               id="inputEmail5"
                               min="0"
-                              {...register("weight")}
+                              {...register("weight",{
+                                required:"Bạn cần nhập trọng lượng"
+                              })}
                               // defaultValue={dataUpdate?.product?.weight}
                             />
+                            <p className="text-danger">{errors?.weight?.message}</p>
                           </div>
                           <div className="form-group col-md-6">
                             <label htmlFor="inputPassword4">Chiều cao</label>
@@ -257,19 +271,42 @@ const UpdateProducts = () => {
                               className="form-control"
                               id="inputPassword5"
                               min="0"
-                              {...register("height")}
+                              {...register("height", {
+                                required:"Bạn cần nhập chiều cao"
+                              })}
                               // defaultValue={dataUpdate?.product?.height}
                             />
+                            <p className="text-danger">{errors?.height?.message}</p>
                           </div>
                         </div>
                         <div className="form-row">
+                          <div className="form-group col-md-4">
+                            <label htmlFor="inputState">Chất liệu</label>
+                            <select
+                              id="inputState5"
+                              className="form-control"
+                              {...register("originId", {
+                                required:"Bạn cần nhập chất liệu"
+                              })}
+                              // defaultValue={dataUpdate.originId?.name}
+                            >
+                              {origin.map((item) => {
+                                return (
+                                  <option value={item._id}>{item.name}</option>
+                                );
+                              })}
+                            </select>
+                            <p className="text-danger">{errors?.originId?.message}</p>
+                          </div>
                           <div className="form-group col-md-4">
                             <label htmlFor="inputState">Xuất xứ</label>
                             <select
                               id="inputState5"
                               className="form-control"
-                              {...register("originId")}
-                              defaultValue={dataUpdate?.originId?._id}
+                              {...register("materialId", {
+                                required:"Bạn cần nhập xuất xứ"
+                              })}
+                              // defaultValue={dataUpdate?.materialId?.name}
                             >
                               {material.map((item) => {
                                 return (
@@ -277,28 +314,16 @@ const UpdateProducts = () => {
                                 );
                               })}
                             </select>
-                          </div>
-                          <div className="form-group col-md-4">
-                            <label htmlFor="inputState">Chất liệu</label>
-                            <select
-                              id="inputState5"
-                              className="form-control"
-                              {...register("materialId")}
-                              defaultValue={dataUpdate?.materialId?.name}
-                            >
-                              {origin.map((item) => {
-                                return (
-                                  <option value={item._id}>{item?.name}</option>
-                                );
-                              })}
-                            </select>
+                            <p className="text-danger">{errors?.materialId?.message}</p>
                           </div>
                           <div className="form-group col-md-4">
                             <label htmlFor="inputState">Danh mục</label>
                             <select
                               id="inputState5"
                               className="form-control"
-                              {...register("categoryId")}
+                              {...register("categoryId", {
+                                required:"Bạn cần nhập danh mục"
+                              })}
                             >
                               {category.map((item) => {
                                 return (
@@ -306,6 +331,7 @@ const UpdateProducts = () => {
                                 );
                               })}
                             </select>
+                            <p className="text-danger">{errors?.categoryId?.message}</p>
                           </div>
                         </div>
                         <button
