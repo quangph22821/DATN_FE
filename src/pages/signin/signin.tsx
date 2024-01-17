@@ -94,6 +94,7 @@ const Signin = () => {
               >
                 Đăng Nhập
               </button>
+              <Link to="/forgotpassword"> <p>Quên mật khẩu</p> </Link>
             </form>
             <Link to="/signup">
               {" "}
