@@ -115,7 +115,7 @@ const Header = () => {
 
       {/* Navbar Start */}
       <div className="container-fluid bg-dark mb-30">
-        <div className="row px-xl-5"> 
+        <div className="row px-xl-5">
           <div className="col-lg-3 d-none d-lg-block">
             <a
               className="btn d-flex align-items-center justify-content-between bg-primary w-100"
@@ -165,7 +165,7 @@ const Header = () => {
                 id="navbarCollapse"
               >
                 <div className="navbar-nav mr-auto py-0">
-                  <Link to="" className="nav-item nav-link active">
+                  <Link to="" className="nav-item nav-link ">
                     Trang chủ
                   </Link>
                   <Link to="/shop" className="nav-item nav-link">
