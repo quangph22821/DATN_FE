@@ -232,10 +232,7 @@ const UpdateProducts = () => {
                           </Upload> */}
                             <label htmlFor="inputAddress">Image</label>
                             <br />
-                            <input type="file" multiple {...register("img",{
-                                required:"Bạn cần thêm ảnh"
-                              })} />
-                            <p className="text-danger">{errors?.img?.message}</p>
+                            <input type="file" multiple {...register("img")} />
                           </div>
                           <div className="form-group col-md-6">
                             <label htmlFor="inputAddress2">Description</label>

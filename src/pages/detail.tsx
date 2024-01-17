@@ -269,18 +269,10 @@ const DetailPage = () => {
               </h3>
               <p className="mb-4">{product.description}</p>
               <div className="d-flex mb-3">
-                <strong className="text-dark mr-3">Xuất xứ:</strong>
+                <strong className="text-dark mr-3">Danh mục:</strong>
                 <div className="">
                   <label className="" htmlFor="size-1">
-                    {product?.materialId?.name}
-                  </label>
-                </div>
-              </div>
-              <div className="d-flex mb-4">
-                <strong className="text-dark mr-3">Chất liệu:</strong>
-                <div className="">
-                  <label className="" htmlFor="color-1">
-                    {product.originId?.name}
+                    {product?.categoryId?.name}
                   </label>
                 </div>
               </div>
