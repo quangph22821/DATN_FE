@@ -86,17 +86,7 @@ const ListProductsPage = () => {
               Edit
             </Button>
           </Link>
-          <Popconfirm
-            title="Bạn có chắc chắn là xóa sản phẩm này?"
-            onConfirm={() => confirmDelete(record.key)}
-            onCancel={cancelDelete}
-            okText="Đồng ý"
-            cancelText="Không"
-          >
-            <Button type="primary" danger>
-              Delete
-            </Button>
-          </Popconfirm>
+          
         </Space>
       ),
     },

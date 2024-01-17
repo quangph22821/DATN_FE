@@ -31,7 +31,6 @@ import ForgotPassword from "./pages/forgotpassword/forgotpassword";
 import UpdatePassword from "./pages/updateUser";
 import NotFoundPage from "./pages/notFound";
 import UpdateBill from "./admin/bill/updateBill";
-
 const router = createBrowserRouter([
   {
     path: "/",
