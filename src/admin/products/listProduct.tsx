@@ -31,16 +31,6 @@ const ListProductsPage = () => {
   }, []);
   const datass: IProducts[] = product;
   const confirmDelete = async (id: string) => {
-    const bills = await dispatch(fetchBillAll());
-    const isProductInBill = bills.some((bill) =>
-      bill.products.some((product) => product.productId === id)
-    );
-
-    // Nếu sản phẩm có trong hóa đơn, hiển thị thông báo và ngăn chặn xóa
-    if (isProductInBill) {
-      message.warning("Không thể xóa sản phẩm vì đã có trong hóa đơn.");
-      return;
-    }
     try {
       await dispatch(fetchProductsRemove(id));
       await dispatch(fetchProductsAll());
