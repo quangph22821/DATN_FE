@@ -91,7 +91,7 @@ const router = createBrowserRouter([
       { path: "/admin/listUser", element: <ListUsersPage /> },
       
       // Comment
-      { path: "/admin/listComment", element: <ListCommentPage /> },
+      
     ],
   },
   { path: "*", element: <NotFoundPage /> },
