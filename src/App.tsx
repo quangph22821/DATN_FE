@@ -27,7 +27,9 @@ import UpdateMaterial from "./admin/material/update";
 import ListProductsPage from "./admin/products/listProduct";
 import CreateProducts from "./admin/products/createProduct";
 import UpdateProducts from "./admin/products/updateProduct";
-
+import ForgotPassword from "./pages/forgotpassword/forgotpassword";
+import UpdatePassword from "./pages/updateUser";
+import NotFoundPage from "./pages/notFound";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -45,6 +47,8 @@ const router = createBrowserRouter([
       { path: "/signup", element: <Signup /> },
       { path: "/profile", element: <ProfilePage /> },
       { path: "/bills/user/:id", element: <HistoryPage /> },
+      { path: "/forgotpassword", element: <ForgotPassword /> },
+      { path: "/bills/updatePassword/:id", element: <UpdatePassword /> },
     ],
   },
   {
@@ -52,41 +56,42 @@ const router = createBrowserRouter([
     element: <AdminLayout />,
     children: [
       { path: "/admin", element: <DashboardPage /> },
-
+      
       // Products
       { path: "/admin/listPro", element: <ListProductsPage /> },
       { path: "/admin/createPro", element: <CreateProducts /> },
       { path: "/admin/updatePro/:id", element: <UpdateProducts /> },
-
+      
       // Category
       { path: "/admin/listCate", element: <ListCategoryPage /> },
       { path: "/admin/createCate", element: <CreateCategory /> },
       { path: "/admin/updateCate/:id", element: <UpdateCategory /> },
-
+      
       // Origin
       { path: "/admin/listOri", element: <ListOriginPage /> },
       { path: "/admin/createOri", element: <CreateOrigin /> },
       { path: "/admin/updateOri/:id", element: <UpdateOrigin /> },
-
+      
       // Material
       { path: "/admin/listMate", element: <ListMaterialPage /> },
       { path: "/admin/createMate", element: <CreateMaterial /> },
       { path: "/admin/updateMate/:id", element: <UpdateMaterial /> },
-
+      
       // Cart
       // { path: "/admin/listCart", element: <ListCartPage /> },
-
+      
       // Bill
       // { path: "/admin/listBill", element: <ListBillPage /> },
       // { path: "/admin/updateBill/:id", element: <UpdateBill /> },
-
+      
       // Users
       { path: "/admin/listUser", element: <ListUsersPage /> },
-
+      
       // Comment
       // { path: "/admin/listComment", element: <ListCommentPage /> },
     ],
   },
+  { path: "*", element: <NotFoundPage /> },
 ]);
 function App() {
   return <RouterProvider router={router} />;
