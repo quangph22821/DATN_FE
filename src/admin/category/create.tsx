@@ -78,8 +78,11 @@ const CreateCategory = () => {
                               type="text"
                               className="form-control"
                               id="inputEmail5"
-                              {...register("name")}
+                              {...register("name",{
+                                required:"Bạn cần nhập tên"
+                              })}
                             />
+                            <p className="text-danger">{errors?.name?.message}</p>
                           </div>
                         </div>
                         <div className="form">
@@ -90,8 +93,11 @@ const CreateCategory = () => {
                               type="file"
                               className=""
                               id="inputEmail5"
-                              {...register("img")}
+                              {...register("img",{
+                                required:"Bạn cần thêm ảnh"
+                              })}
                             />
+                            <p className="text-danger">{errors?.img?.message}</p>
                           </div>
                         </div>
                         <button
