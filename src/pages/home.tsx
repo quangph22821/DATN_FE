@@ -33,8 +33,10 @@ const HomePage = () => {
     fetchCategories();
   }, []);
 
+  // const navigate = useNavigate();
   const { _id }: any = useParams();
-
+  // const [quantity, setQuantity] = useState(1);
+  // const { handleSubmit, register, setValue } = useForm();
 
   const [products, setproducts] = useState<IProducts>({} as IProducts);
   const fetchProductById = async (_id: string) => {
@@ -48,20 +50,46 @@ const HomePage = () => {
     fetchProductById(_id);
   }, []);
 
+  // nhấp ảnh nhỏ ra ảnh lớn bên trên, dùng onclick của trong img vừa đổ
+  // const disImages = (u) => {
+  //   const mainImg = document.getElementById("Img");
+  //   mainImg.src = u;
+  // };
   console.log(products);
 
-  const onSubmit = async (body: any) => {
-    try {
-      await dispatch(fetchAddToCard(body)).unwrap();
-      message.success({
-        content: "Bạn đã thêm vào giỏ hàng thành công",
-        key: "add",
-      });
-      console.log("cart", body);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // // Tăng số lượng sản phẩm
+  // useLayoutEffect(() => {
+  //   if(quantity<1){
+  //     setQuantity(1)
+  //   }else if(quantity >= 7){
+  //     setQuantity(1)
+  //   }
+  // })
+
+  // const handlePlus = () => {
+  //   setQuantity(quantity + 1)
+  // }
+
+  // const handleMinus = () => {
+  //   setQuantity(quantity - 1)
+  // }
+
+  // useEffect(() => {
+  //   setValue("productId", products._id); // Đặt giá trị mặc định cho trường 'id'
+  // }, [products._id, setValue]);
+
+  // const onSubmit = async (body: any) => {
+  //   try {
+  //     await dispatch(fetchAddToCard(body)).unwrap();
+  //     message.success({
+  //       content: "Bạn đã thêm vào giỏ hàng thành công",
+  //       key: "add",
+  //     });
+  //     console.log("cart", body);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -98,7 +126,7 @@ const HomePage = () => {
               style={{ padding: 30 }}
             >
               <h1 className="fa fa-shipping-fast text-primary m-0 mr-2" />
-              <h5 className="font-weight-semi-bold m-0">Giao hàng miễn phí</h5>
+              <h5 className="font-weight-semi-bold m-0">Dịch vụ giao hàng nhanh</h5>
             </div>
           </div>
           <div className="col-lg-3 col-md-6 col-sm-12 pb-1">
@@ -133,7 +161,7 @@ const HomePage = () => {
           <span className="bg-secondary pr-3">Danh mục sản phẩm</span>
         </h2>
         <div className="row px-xl-5 pb-3">
-          {category.map((item) => (
+          {category.slice(0,8).map((item) => (
             <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
               <a className="text-decoration-none" href="">
                 <div className="cat-item d-flex align-items-center mb-4">
@@ -170,7 +198,12 @@ const HomePage = () => {
             <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
               <div className="product-item bg-light mb-4">
                 <div className="product-img position-relative overflow-hidden">
-                  <img className="img-fluid w-100" src={item.img?.[0]} alt="" style={{width:362,height:362}}   />
+                  <img
+                    className="img-fluid w-100"
+                    src={item.img?.[0]}
+                    alt=""
+                    style={{ height: "260px", width: "350px" }}
+                  />
                   <div className="product-action">
                     <a className="btn btn-outline-dark btn-square" href="">
                       <i className="fa fa-shopping-cart" />
@@ -210,12 +243,26 @@ const HomePage = () => {
                     {item.name}
                   </Link>
                   <div className="d-flex align-items-center justify-content-center mt-2">
-                    <h5>{item.price}.000 VNĐ</h5>
+                    <h5>
+                      {new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      }).format(item.price)}
+                    </h5>
                     <h6 className="text-muted ml-2">
                       {/* <del>$123.00</del> */}
                     </h6>
                   </div>
-                 
+                  <div className="d-flex align-items-center justify-content-center mb-1">
+                    <small className="fa fa-star text-primary mr-1" />
+                    <small className="fa fa-star text-primary mr-1" />
+                    <small className="fa fa-star text-primary mr-1" />
+                    <small className="fa fa-star text-primary mr-1" />
+                    <small className="fa fa-star text-primary mr-1" />
+                    <small>(99)</small>
+                  </div>
                 </div>
               </div>
             </div>
@@ -266,8 +313,8 @@ const HomePage = () => {
       {/* Vendor Start */}
       <div className="container-fluid py-5">
         <div className="row px-xl-5">
-          <div className="col" style={{marginLeft: "75px"}}>
-            <div className="d-flex flex-row" >
+          <div className="col" style={{ marginLeft: "75px" }}>
+            <div className="d-flex flex-row">
               <div className="bg-light p-4">
                 <img src="../../src/assets/img/vendor-1.jpg" alt="" />
               </div>

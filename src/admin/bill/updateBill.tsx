@@ -226,12 +226,6 @@ const UpdateBill = () => {
                         >
                           Update
                         </button>
-                        <button
-                          type="reset"
-                          className="btn btn-warning bg-yellow-600 "
-                        >
-                          Reset
-                        </button>
                       </form>
                     </div>{" "}
                     {/* /. card-body */}
