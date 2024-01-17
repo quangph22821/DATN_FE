@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Modal, Space } from "antd";
 import { useEffect, useState } from "react";
@@ -19,7 +19,7 @@ import { addProductToCart } from "../redux/cart.reducer";
 
 const desc = ["terrible", "bad", "normal", "good", "wonderful"];
 const DetailPage = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { id } = useParams();
   const [product, setProduct] = useState<IProducts>({} as IProducts);
   const dispatch = useDispatch<AppDispatch>();
@@ -37,14 +37,16 @@ const DetailPage = () => {
       // console.log(data.product.categoryId.name);
 
       setCommentProducts(data.product);
-    } catch (error) { }
+    } catch (error) {}
   };
   const fetchProductCategory = async () => {
     const { data } = await getAll();
     const dataProductCategory = data.product;
     // lọc tất cả products theeo category
     const ProductCategory = dataProductCategory.filter(
-      (item: any) => item?.categoryId?._id === product?.categoryId?._id
+      (item: any) =>
+        item?.categoryId?._id === product?.categoryId?._id &&
+        item?._id !== product?._id
     );
     setBodyProductCategory(ProductCategory);
   };
@@ -154,7 +156,6 @@ const DetailPage = () => {
       await dispatch(addProductToCart(body));
       message.success("Sản phẩm đã được thêm vào giỏ hàng!");
       console.log(body.quantity);
-
     }
   };
 
@@ -259,18 +260,19 @@ const DetailPage = () => {
                 <small className="pt-1">(99 Reviews)</small>
               </div>
               <h3 className="font-weight-semi-bold mb-4">
-                {product.price}.000 VNĐ
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).format(product.price)}
               </h3>
-              <p className="mb-4">
-                Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr
-                erat diam stet sit clita ea. Sanc ipsum et, labore clita lorem
-                magna duo dolor no sea Nonumy
-              </p>
+              <p className="mb-4">{product.description}</p>
               <div className="d-flex mb-3">
                 <strong className="text-dark mr-3">Xuất xứ:</strong>
                 <div className="">
                   <label className="" htmlFor="size-1">
-                    {product.materialId?.name}
+                    {product?.materialId?.name}
                   </label>
                 </div>
               </div>
@@ -298,6 +300,7 @@ const DetailPage = () => {
                     type="number"
                     className="form-control bg-secondary border-0 text-center"
                     min={1}
+                    max={10}
                     value={quantity}
                     onChange={(event) =>
                       setQuantity(Number(event.target.value))
@@ -311,13 +314,14 @@ const DetailPage = () => {
                     </button> */}
                   </div>
                 </div>
-                <button className="btn btn-primary px-3"
-                onClick={() =>
-                  onHandaleAdd({
-                    productId: String(product?._id),
-                    quantity,
-                  })
-                }
+                <button
+                  className="btn btn-primary px-3"
+                  onClick={() =>
+                    onHandaleAdd({
+                      productId: String(product?._id),
+                      quantity,
+                    })
+                  }
                 >
                   <i className="fa fa-shopping-cart mr-1" /> Thêm vào giỏ hàng
                 </button>
@@ -364,7 +368,6 @@ const DetailPage = () => {
               <div className="tab-content">
                 <div className="tab-pane fade show active" id="tab-pane-2">
                   <h4 className="mb-3">Thông tin chi tiết</h4>
-                  <p>{product.description}</p>
                   <div className="row">
                     <div className="col-md-6">
                       <ul className="list-group list-group-flush">
@@ -398,57 +401,62 @@ const DetailPage = () => {
                       <h4 className="mb-4">
                         Đánh giá cho sản phẩm {product.name}
                       </h4>
-              
-                      {currentComment&&currentComment.map((comment) => (
-                        <>
-                          <div key={comment.id} className="media mb-">
-                            <Space direction="vertical" size={16}>
-                              <Space wrap size={16}>
-                                {/* <Avatar size={64} icon={<UserOutlined />} /> */}
-                                <Avatar size="large" icon={<UserOutlined />} />
-                                {/* <Avatar icon={<UserOutlined />} /> */}
-                                {/* <Avatar size="small" icon={<UserOutlined />} /> */}
-                              </Space>
-                            </Space>
-                            <div className="media-body">
-                              <h6>
-                                {comment?.userId?.name}
-                                <small>
-                                  {" "}
-                                  -{" "}
-                                  <i>
-                                    {new Date(
-                                      comment.updatedAt
-                                    ).toLocaleDateString()}
-                                  </i>
-                                </small>
-                              </h6>
-                              <div className="text-primary mb-2">
-                                <Rate
-                                  tooltips={desc}
-                                  disabled
-                                  value={comment?.rate}
-                                />
-                                <span>{desc[comment.rate - 1]}</span>
-                              </div>
-                              <p>{comment?.comment?.comment}</p>
-                            </div>
-                            {/* Đặt Pagination ở đây để tính toán số lượng trang đúng */}
-                          </div>
 
-                          {userId?._id === comment.userId._id && (
-                            <Flex
-                              gap="small"
-                              style={{ marginLeft: 400 }}
-                              wrap="wrap"
-                            >
-                              <Button onClick={() => dele(comment?._id)}>
-                                xóa bình luận
-                              </Button>
-                            </Flex>
-                          )}
-                        </>
-                      ))}
+                      {currentComment &&
+                        currentComment.map((comment) => (
+                          <>
+                            <div key={comment.id} className="media mb-">
+                              <Space direction="vertical" size={16}>
+                                <Space wrap size={16}>
+                                  {/* <Avatar size={64} icon={<UserOutlined />} /> */}
+                                  <Avatar
+                                    size="large"
+                                    icon={<UserOutlined />}
+                                    style={{ marginRight: "12px" }}
+                                  />
+                                  {/* <Avatar icon={<UserOutlined />} /> */}
+                                  {/* <Avatar size="small" icon={<UserOutlined />} /> */}
+                                </Space>
+                              </Space>
+                              <div className="media-body">
+                                <h6>
+                                  {comment?.userId?.name}
+                                  <small>
+                                    {" "}
+                                    -{" "}
+                                    <i>
+                                      {new Date(
+                                        comment.updatedAt
+                                      ).toLocaleDateString()}
+                                    </i>
+                                  </small>
+                                </h6>
+                                <div className="text-primary mb-2">
+                                  <Rate
+                                    tooltips={desc}
+                                    disabled
+                                    value={comment?.rate}
+                                  />
+                                  <span>{desc[comment.rate - 1]}</span>
+                                </div>
+                                <p>{comment?.comment?.comment}</p>
+                              </div>
+                              {/* Đặt Pagination ở đây để tính toán số lượng trang đúng */}
+                            </div>
+
+                            {userId?._id === comment.userId._id && (
+                              <Flex
+                                gap="small"
+                                style={{ marginLeft: 400 }}
+                                wrap="wrap"
+                              >
+                                <Button onClick={() => dele(comment?._id)}>
+                                  xóa bình luận
+                                </Button>
+                              </Flex>
+                            )}
+                          </>
+                        ))}
                       <Pagination
                         total={dataComment.length}
                         pageSize={pageSize}
@@ -516,9 +524,8 @@ const DetailPage = () => {
         <div className="row px-xl-5">
           <div className="col">
             <div className="d-flex flex-row mb-3">
-              {console.log(bodyProductCategory)}
               {bodyProductCategory &&
-                bodyProductCategory.map((item) => (
+                bodyProductCategory.slice(0, 4).map((item) => (
                   <div className=" me-3 product-item bg-light">
                     <div className="product-img position-relative overflow-hidden">
                       <img
@@ -527,33 +534,24 @@ const DetailPage = () => {
                         alt=""
                         style={{ maxWidth: 362, height: 362 }}
                       />
-                      <div className="product-action">
-                        <a className="btn btn-outline-dark btn-square" href="">
-                          <i className="fa fa-shopping-cart" />
-                        </a>
-                        <a className="btn btn-outline-dark btn-square" href="">
-                          <i className="far fa-heart" />
-                        </a>
-                        <a className="btn btn-outline-dark btn-square" href="">
-                          <i className="fa fa-sync-alt" />
-                        </a>
-                        <a className="btn btn-outline-dark btn-square" href="">
-                          <i className="fa fa-search" />
-                        </a>
-                      </div>
                     </div>
                     <div className="text-center py-4">
                       <a
                         className="h6 text-decoration-none text-truncate"
-                        href=""
+                        href={`/detail/${item._id}`}
                       >
                         {item.name}
                       </a>
                       <div className="d-flex align-items-center justify-content-center mt-2">
-                        <h5>{item.price}</h5>
-                        <h6 className="text-muted ml-2">
-                          
-                        </h6>
+                        <h5>
+                          {new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          }).format(product.price)}
+                        </h5>
+                        <h6 className="text-muted ml-2"></h6>
                       </div>
                     </div>
                   </div>
