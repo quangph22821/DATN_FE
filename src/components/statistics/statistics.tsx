@@ -191,40 +191,40 @@ const MyChart = () => {
   };
 
   // CALL API THEO Tháng
-  // const fetchDataMonth = async (year: any, month: any) => {
-  //   try {
-  //     setLoading(true);
+  const fetchDataMonth = async (year: any, month: any) => {
+    try {
+      setLoading(true);
 
-  //     // Gọi API để lấy dữ liệu doanh thu cho năm được chọn
-  //     const response = await axios.get(`http://localhost:8080/bymonth?selectedYear=${year}&selectedMonth=${month}`);
-  //     const apiData = response.data.dailyTotalPrices;
-  //     console.log("apiMonth", apiData);
+      // Gọi API để lấy dữ liệu doanh thu cho năm được chọn
+      const response = await axios.get(`http://localhost:8080/bymonth?selectedYear=${year}&selectedMonth=${month}`);
+      const apiData = response.data.dailyTotalPrices;
+      console.log("apiMonth", apiData);
 
-  //     setChartData1((prevChartData: any) => ({
-  //       ...prevChartData,
-  //       series: [
-  //         {
-  //           ...prevChartData.series[0],
-  //           data: apiData,
-  //         },
-  //       ],
-  //       // options: {
-  //       //   ...prevChartData.options,
-  //       //   xaxis: {
-  //       //     ...prevChartData.options.xaxis,
-  //       //     categories: month,
-  //       //   },
-  //       // },
+      setChartData1((prevChartData: any) => ({
+        ...prevChartData,
+        series: [
+          {
+            ...prevChartData.series[0],
+            data: apiData,
+          },
+        ],
+        // options: {
+        //   ...prevChartData.options,
+        //   xaxis: {
+        //     ...prevChartData.options.xaxis,
+        //     categories: month,
+        //   },
+        // },
 
-  //     }));
+      }));
 
 
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.error(error);
-  //     setLoading(false);
-  //   }
-  // };
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+    }
+  };
 
   // CALL API  THỐNG KÊ ĐẶT HÀNG
   useEffect(() => {
@@ -257,13 +257,13 @@ const MyChart = () => {
     }
   };
 
-  // const onChangeMonth: DatePickerProps['onChange'] = (_, dateString) => {
-  //   const lastTwoCharacters = dateString.slice(-2);
-  //   const lastTwoYear = dateString.slice(0, 4);
-  //   if (lastTwoCharacters && lastTwoYear) {
-  //     fetchDataMonth(lastTwoYear, lastTwoCharacters)
-  //   }
-  // };
+  const onChangeMonth: DatePickerProps['onChange'] = (_, dateString) => {
+    const lastTwoCharacters = dateString.slice(-2);
+    const lastTwoYear = dateString.slice(0, 4);
+    if (lastTwoCharacters && lastTwoYear) {
+      fetchDataMonth(lastTwoYear, lastTwoCharacters)
+    }
+  };
 
   return (
     <div>
