@@ -31,6 +31,8 @@ import ForgotPassword from "./pages/forgotpassword/forgotpassword";
 import UpdatePassword from "./pages/updateUser";
 import NotFoundPage from "./pages/notFound";
 import UpdateBill from "./admin/bill/updateBill";
+import ListBillPage from "./admin/bill/listBill";
+import ListCommentPage from "./admin/comment/listComment";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -82,14 +84,14 @@ const router = createBrowserRouter([
       // { path: "/admin/listCart", element: <ListCartPage /> },
       
       // Bill
-      // { path: "/admin/listBill", element: <ListBillPage /> },
+      { path: "/admin/listBill", element: <ListBillPage /> },
       { path: "/admin/updateBill/:id", element: <UpdateBill /> },
       
       // Users
       { path: "/admin/listUser", element: <ListUsersPage /> },
       
       // Comment
-      // { path: "/admin/listComment", element: <ListCommentPage /> },
+      { path: "/admin/listComment", element: <ListCommentPage /> },
     ],
   },
   { path: "*", element: <NotFoundPage /> },
