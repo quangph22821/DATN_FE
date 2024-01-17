@@ -57,6 +57,8 @@ const UpdateProducts = () => {
       }
     },
   });
+
+  
   const onSubmit = async (body: any) => {
     try {
       const images = await uploadFiles(body.img);
@@ -72,11 +74,11 @@ const UpdateProducts = () => {
 
   const fetchProductById = async (id: string) => {
     const data = await dispatch(fetchProductsOne(id)).unwrap();
-    setDataupdate(data)
+    setDataupdate(data.product)
     return data.product
     
   };
-  
+  console.log("dataupdate",dataUpdate.originId?.name);
   
   useEffect(() => {
     if (id) {
@@ -190,7 +192,7 @@ const UpdateProducts = () => {
                                 required:"Bạn cần nhập tên"
                               })}
 
-                              // defaultValue={dataUpdate?.product?.name}
+                             
                             />
                             <p className="text-danger">{errors?.name?.message}</p>
                           </div>
@@ -204,7 +206,7 @@ const UpdateProducts = () => {
                               {...register("price", {
                                 required:"Bạn cần nhập giá"
                               })}
-                              // defaultValue={dataUpdate?.product?.price}
+                              
                             />
                             <p className="text-danger">{errors?.price?.message}</p>
                           </div>
@@ -279,16 +281,16 @@ const UpdateProducts = () => {
                         </div>
                         <div className="form-row">
                           <div className="form-group col-md-4">
-                            <label htmlFor="inputState">Xuất xứ</label>
+                            <label htmlFor="inputState">Chất liệu</label>
                             <select
                               id="inputState5"
                               className="form-control"
                               {...register("originId", {
-                                required:"Bạn cần nhập xuất xứ"
+                                required:"Bạn cần nhập chất liệu"
                               })}
-                              defaultValue={dataUpdate?.originId?._id}
+                              // defaultValue={dataUpdate.originId?.name}
                             >
-                              {material.map((item) => {
+                              {origin.map((item) => {
                                 return (
                                   <option value={item._id}>{item.name}</option>
                                 );
@@ -297,18 +299,18 @@ const UpdateProducts = () => {
                             <p className="text-danger">{errors?.originId?.message}</p>
                           </div>
                           <div className="form-group col-md-4">
-                            <label htmlFor="inputState">Chất liệu</label>
+                            <label htmlFor="inputState">Xuất xứ</label>
                             <select
                               id="inputState5"
                               className="form-control"
                               {...register("materialId", {
-                                required:"Bạn cần nhập chất liệu"
+                                required:"Bạn cần nhập xuất xứ"
                               })}
-                              defaultValue={dataUpdate?.materialId?.name}
+                              // defaultValue={dataUpdate?.materialId?.name}
                             >
-                              {origin.map((item) => {
+                              {material.map((item) => {
                                 return (
-                                  <option value={item._id}>{item?.name}</option>
+                                  <option value={item._id}>{item.name}</option>
                                 );
                               })}
                             </select>
