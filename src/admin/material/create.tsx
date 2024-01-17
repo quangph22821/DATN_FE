@@ -35,14 +35,15 @@ const CreateMaterial = () => {
                             <div className="form-group">
                               <label htmlFor="inputEmail4">Name</label>
                               <input
-                                type="text"
-                                className="form-control"
-                                id="inputEmail5"
-                                {...register("name"),{
-                                  required: "Vui lòng không để trống",
-                                }}
-                              />
-                              <p className="text-danger">{errors?.name?.message}</p>
+                              type="text"
+                              className="form-control"
+                              id="inputEmail5"
+                              {...register("name", {
+                                required:"Bạn cần nhập tên"
+                              })
+                             }
+                            />
+                            <p className="text-danger">{errors?.name?.message}</p>
                             </div>
                           </div>
                           <button

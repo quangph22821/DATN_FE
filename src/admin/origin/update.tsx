@@ -62,12 +62,12 @@ const UpdateOrigin = () => {
                               type="text"
                               className="form-control"
                               id="inputEmail5"
-                              {...register("name"),
-                              {
-                                required: "Vui lòng không để trống",
-                              }}
+                              {...register("name", {
+                                required:"Bạn cần nhập tên"
+                              })
+                             }
                             />
-                            <p className="text-danger">{errors?.price?.message}</p>
+                            <p className="text-danger">{errors?.name?.message}</p>
                           </div>
                         </div>
                         <button
