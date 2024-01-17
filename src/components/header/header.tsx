@@ -165,7 +165,7 @@ const Header = () => {
                 id="navbarCollapse"
               >
                 <div className="navbar-nav mr-auto py-0">
-                  <Link to="" className="nav-item nav-link active">
+                  <Link to="" className="nav-item nav-link ">
                     Trang chủ
                   </Link>
                   <Link to="/shop" className="nav-item nav-link">

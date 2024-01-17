@@ -33,10 +33,7 @@ const ListBillPage = () => {
   useEffect(() => {
     dispatch(fetchBillAll());
   }, []);
-  const datass: IBill[] = bill;
-  const cancelDelete = () => {
-    message.error("Bạn đã hủy thao tác xóa");
-  };
+  const datass: IBill[] = bill
 
   // LỌC THEO TRẠN THÁI ĐƠN HÀNG
   const uniqueStatus = Array.from(
@@ -45,11 +42,6 @@ const ListBillPage = () => {
   const statusFilters = uniqueStatus.map((status) => ({ text: status, value: status }));
 
   // LỌC THEO TÊN KHÁCH HÀNG
-  const uniqueName = Array.from(
-    new Set(datass?.map((bill: any) => bill.userId))
-  );
-  const nameFilters = uniqueName.map((userId) => ({ text: userId, value: userId }));
-
   // LỌC THEO PHƯƠNG THỨC THANH TOÁN
   const uniquePayment = Array.from(
     new Set(datass?.map((bill: any) => bill.paymentMethod))
@@ -61,41 +53,26 @@ const ListBillPage = () => {
       title: "Tên khách hàng",
       dataIndex: "userId",
       width: "30%",
-      filters: uniqueName,
-      onFilter: (value, record) => record.userId.indexOf(value.toString()) === 0,
-      sorter: (a, b) => a.userId.localeCompare(b.userId),
     },
     {
       title: "Mã đơn hàng",
       dataIndex: "key",
       width: "30%",
-      filters: nameFilters,
-      onFilter: (value, record) => record.name.indexOf(value.toString()) === 0,
-      sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
       title: "Số điện thoại",
       dataIndex: "phone",
       width: "30%",
-      filters: nameFilters,
-      onFilter: (value, record) => record.name.indexOf(value.toString()) === 0,
-      sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
       title: "Địa chỉ",
       dataIndex: "shippingAddress",
       width: "30%",
-      filters: nameFilters,
-      onFilter: (value, record) => record.name.indexOf(value.toString()) === 0,
-      sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
       title: "Tổng tiền",
       dataIndex: "totalPrice",
       width: "30%",
-      filters: nameFilters,
-      onFilter: (value, record) => record.name.indexOf(value.toString()) === 0,
-      sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
       title: "Phương thức",
@@ -121,21 +98,10 @@ const ListBillPage = () => {
       render: (_, record) => (
         <Space size="middle">
           <Link to={`/admin/updateBill/${record.key}`}>
-            <Button className="btn-edit text-[#30D200] border-[#31d200cb] hover:text-[#31d200ba] hover:border-[#30D200] active:border-[#30D200]">
+            <Button danger className="btn-edit text-[#30D200] border-[#31d200cb] hover:text-[#31d200ba] hover:border-[#30D200] active:border-[#30D200]">
               Edit
             </Button>
           </Link>
-          <Popconfirm
-            title="Bạn có chắc chắn là muốn xóa nơi xuất xứ này?"
-            onConfirm={() => confirmDelete(record.key)}
-            onCancel={cancelDelete}
-            okText="Đồng ý"
-            cancelText="Không"
-          >
-            <Button type="primary" danger>
-              Delete
-            </Button>
-          </Popconfirm>
         </Space>
       ),
     },

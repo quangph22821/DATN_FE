@@ -1,13 +1,13 @@
 import { message } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MyChart from "../components/statistics/statistics";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import { fetchUsersAll } from "../redux/user.reducer";
 import { fetchProductsAll } from "../redux/products.reducer";
-import { FaBox } from "react-icons/fa";
 import { fetchBillAll } from "../redux/bill.reducer";
+import axios from "axios";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -16,6 +16,8 @@ const DashboardPage = () => {
   const { user } = useSelector((state: RootState) => state.users);
   const { product } = useSelector((state: RootState) => state.products);
   const { bill } = useSelector((state: RootState) => state.bills);
+  const [successRate, setSuccessRate] = useState(0);
+  const [cancelRate, setCancelRate] = useState(0);
 
   // ĐẾM SỐ LƯỢNG NGƯỜI DÙNG VÀ SẢN PHẨM
   useEffect(() => {
@@ -27,7 +29,6 @@ const DashboardPage = () => {
   const numberOfProducts = product.length;
 
   // ĐẾM SỐ LƯỢNG ĐÃ NHẬN HÀNG
-
   // Lọc đơn hàng có trạng thái "đã nhận hàng"
   const receivedOrders = bill.filter(
     (order) => order.status === "Đã giao hàng"
@@ -35,6 +36,27 @@ const DashboardPage = () => {
 
   // Số lượng đơn hàng đã nhận hàng
   const numberOfReceivedOrders = receivedOrders.length;
+
+  // TỶ LỆ ĐẶT HÀNG THÀNH CÔNG
+  useEffect(() => {
+    const fetchStatistics = async () => {
+      try {
+        const result = await axios.get("http://localhost:8080/rate");
+        console.log(result.data);
+        const cancelRate = result.data.cancelRate;
+        const successRate = result.data.successRate;
+        console.log("rate: " + successRate, cancelRate);
+        setSuccessRate(successRate);
+        setCancelRate(cancelRate);
+
+        // Cập nhật giá trị series trong state với dữ liệu mới
+      } catch (error) {
+        console.error("Error fetching statistics:", error.message);
+      }
+    };
+
+    fetchStatistics();
+  }, []);
 
   useEffect(() => {
     if (!accessRole) {
@@ -46,7 +68,6 @@ const DashboardPage = () => {
       navigate("/signin");
     }
     if (accessRole == "admin") {
-      message.success("xin chào admin !");
       navigate("/admin");
     }
   }, [accessRole, navigate]);
@@ -58,9 +79,9 @@ const DashboardPage = () => {
           <div
             style={{
               height: "120px",
-              backgroundColor: "#f5f5f5", 
+              backgroundColor: "#f5f5f5", // Màu nền
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-              padding: "20px", 
+              padding: "20px", // Khoảng cách nội dung từ mép
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -78,6 +99,7 @@ const DashboardPage = () => {
                 color: "#1890ff",
               }}
             />
+            {/* Icon */}
             <h5
               style={{
                 marginBottom: "10px",
@@ -99,9 +121,9 @@ const DashboardPage = () => {
             style={{
               height: "120px",
               marginLeft:"10px",
-              backgroundColor: "#f5f5f5", 
+              backgroundColor: "#f5f5f5", // Màu nền
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-              padding: "20px", 
+              padding: "20px", // Khoảng cách nội dung từ mép
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -119,6 +141,7 @@ const DashboardPage = () => {
                 color: "#ff4d4f",
               }}
             />
+            {/* Icon */}
             <h5
               style={{
                 marginBottom: "10px",
@@ -135,13 +158,55 @@ const DashboardPage = () => {
             </span>
           </div>
 
-          {/* ĐẾM SỐ LƯỢNG NGƯỜI DÙNG  */}
+          {/* TỶ LỆ ĐẶT HÀNG THÀNH CÔNG */}
           <div
             style={{
               height: "120px",
-              backgroundColor: "#f5f5f5", 
+              backgroundColor: "#f5f5f5", // Màu nền
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-              padding: "20px", 
+              padding: "20px", // Khoảng cách nội dung từ mép
+              display: "flex",
+              marginLeft:"10px",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            className="col"
+          >
+            <i
+              className="fa fa-download"
+              aria-hidden="true"
+              style={{
+                marginBottom: "10px",
+                fontSize: "16px",
+                fontWeight: "bold",
+                color: "green",
+              }}
+            />
+            {/* Icon */}
+            <h5
+              style={{
+                marginBottom: "10px",
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}
+            >
+              Tỷ lệ đặt hàng thành công
+            </h5>
+            <span
+              style={{ fontSize: "24px", color: "green", fontWeight: "bold" }}
+            >
+              {successRate} %
+            </span>
+          </div>
+
+          {/* ĐẾM SỐ LƯỢNG NGƯỜI DÙNG */}
+          <div
+            style={{
+              height: "120px",
+              backgroundColor: "#f5f5f5", // Màu nền
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              padding: "20px", // Khoảng cách nội dung từ mép
               display: "flex",
               marginLeft:"10px",
               flexDirection: "column",
@@ -160,6 +225,7 @@ const DashboardPage = () => {
                 color: "#FFD333",
               }}
             />
+            {/* Icon */}
             <h5
               style={{
                 marginBottom: "10px",
@@ -175,7 +241,6 @@ const DashboardPage = () => {
               {numberOfUsers}
             </span>
           </div>
-
         </div>
       </div>
       <MyChart />
