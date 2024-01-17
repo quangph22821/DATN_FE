@@ -62,7 +62,7 @@ const HistoryPage = () => {
       const { data } = await getOneBill(_id);
       console.log(data.bills);
       setBills(data.bills);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   /// phân trang
@@ -168,7 +168,7 @@ const HistoryPage = () => {
                     <td className="align-middle">
                       <td className="align-middle">
                         {item?.status === "Chờ xác nhận" &&
-                        item?.paymentMethod != "Ví điện tử" ? (
+                          item?.paymentMethod != "Ví điện tử" ? (
                           <button
                             onClick={() => UpdateBillStatus(item?._id)}
                             className="btn btn-sm btn-danger"
