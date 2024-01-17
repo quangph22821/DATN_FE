@@ -244,14 +244,13 @@ const MyChart = () => {
       </div>
       <div>
         <div>
-          <h2>Danh mục bán chạy nhất</h2>
+          <h2>Sản phẩm bán chạy nhất</h2>
           <div>
             <table className="table">
               <thead>
                 <tr>
                   <th scope="col">#</th>
                   <th scope="col">Tên sản phẩm</th>
-                  <th scope="col">Giá</th>
                   <th scope="col">Số lượt bán</th>
                 </tr>
               </thead>
@@ -260,15 +259,6 @@ const MyChart = () => {
                   <tr key={product.productId}>
                     <td>{index + 1}</td>
                     <td>{product.name}</td>
-                    <td>
-                      {" "}
-                      {new Intl.NumberFormat("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 0,
-                      }).format(product.price)}
-                    </td>
                     <td>{product.count}</td>
                   </tr>
                 ))}
