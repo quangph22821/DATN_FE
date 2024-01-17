@@ -6,30 +6,32 @@ import { useEffect } from "react";
 import { RootState } from "../../store";
 import { IUser } from "../../models/user";
 import { fetchUsersAll, fetchUsersRemove } from "../../redux/user.reducer";
+import { IProducts } from "../../models/products";
+import { CommentAll, CommentDelete } from "../../redux/comment.reducer";
 
-interface CategoryData extends IUser {
+interface CategoryData extends Comment {
   recordKey: string;
 }
 
 interface DataType {
   key: string;
-  name: string;
-  email: string;
-  role: string;
+  useId: IUser;
+  comment: string;
+  productId: IProducts;
 }
 
-const ListUsersPage = () => {
-  const { user } = useSelector((state: RootState) => state.users);
+const ListCommentPage = () => {
+  const { Comment } = useSelector((state: RootState) => state.Comment);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchUsersAll());
+    dispatch(CommentAll());
   }, []);
-  const datass: IUser[] = user;
-  const confirmDelete = async (userId: string) => {
+  const datass: Comment[] = Comment;
+  const confirmDelete = async (CommentId: string) => {
     try {
-      await dispatch(fetchUsersRemove(userId));
-      await dispatch(fetchUsersAll());
-      message.success("Người dùng đã được xóa thành cong");
+      await dispatch(CommentDelete(CommentId));
+      await dispatch(CommentAll());
+      message.success("Xóa bình luận thành công");
     } catch (error) {
       if (!error) {
         setTimeout(message.loading("đang sử lí .."), 2000);
@@ -43,37 +45,46 @@ const ListUsersPage = () => {
     message.error("Bạn đã hủy thao tác xóa");
   };
 
-  const uniqueRole = Array.from(
-    new Set(datass?.map((user: any) => user.role))
-  );
-  const roleFilters = uniqueRole.map((role) => ({ text: role, value: role }));
-
   const columns: ColumnsType<DataType> = [
     {
       title: "Name",
-      dataIndex: "name",
-      width: "30%"
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-      width: "30%"
-    },
-    {
-      title: "Role",
-      dataIndex: "role",
+      dataIndex: "useId",
       width: "30%",
-      filters: roleFilters,
-      onFilter: (value, record) => record.role.indexOf(value.toString()) === 0,
-      sorter: (a, b) => a.role.localeCompare(b.role),
-    }
+    },
+    {
+      title: "Bình luận",
+      dataIndex: "comment",
+      width: "30%"
+    },
+    {
+      title: "Action",
+      dataIndex: "",
+      key: "x",
+      width: "20%",
+      render: (_, record) => (
+        <Space size="middle">
+          <Popconfirm
+            title="Bạn có chắc chắn là muốn xóa người dùng này?"
+            onConfirm={() => confirmDelete(record.key)}
+            onCancel={cancelDelete}
+            okText="Đồng ý"
+            cancelText="Không"
+          >
+            <Button type="primary" danger>
+              Delete
+            </Button>
+          </Popconfirm>
+        </Space>
+      ),
+    },
   ];
 
-  const data: DataType[] = datass?.map((user) => ({
-    key: user._id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
+
+  const data: DataType[] = datass?.map((item) => ({
+    key: item._id,
+    useId: item?.userId?.name,
+    comment: item?.comment?.comment,
+    productId: item?.productId?.name
   }));
 
   const categoryData: CategoryData[] = datass?.map((category) => ({
@@ -96,11 +107,11 @@ const ListUsersPage = () => {
       <Table
         columns={columns}
         dataSource={data}
-        pagination={{ pageSize:6 }}
+        pagination={{ pageSize: 4 }}
         onChange={handleTableChange}
       />
     </div>
   );
 };
 
-export default ListUsersPage;
+export default ListCommentPage;

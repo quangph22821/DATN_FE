@@ -28,38 +28,38 @@ const Image3D = () => {
       <div className="tyloo">
         <span style={{ "--i": 0 }}></span>
         <img
-          style={{ height: "300px"}}
-          src={product.img?.[1]}
+          style={{ width: "400px", height: "300px"}}
+          src={product.img?.[0]}
           alt=""
         />
         <span style={{ "--i": 1 }}></span>
         <img
-          style={{ height: "300px"}}
-          src={product.img?.[2]}
+          style={{ width: "400px", height: "300px"}}
+          src={product.img?.[1]}
           alt=""
         />
         <span style={{ "--i": 2 }}></span>
         <img
-          style={{ height: "300px"}}
-          src={product.img?.[3]}
+          style={{ width: "400px", height: "300px"}}
+          src={product.img?.[2]}
           alt=""
         />
         <span style={{ "--i": 3 }}></span>
         <img
-          style={{ height: "300px"}}
-          src={product.img?.[4]}
+          style={{ width: "400px", height: "300px"}}
+          src={product.img?.[3]}
           alt=""
         />
         <span style={{ "--i": 4 }}></span>
         <img
-          style={{ height: "300px"}}
-          src={product.img?.[1]}
+          style={{ width: "400px", height: "300px"}}
+          src={product.img?.[4]}
           alt=""
         />
         <span style={{ "--i": 5 }}></span>
         <img
-          style={{ height: "300px"}}
-          src={product.img?.[0]}
+          style={{ width: "400px", height: "300px"}}
+          src={product.img?.[5]}
           alt=""
         />
       </div>

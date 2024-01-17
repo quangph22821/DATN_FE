@@ -43,8 +43,12 @@ const CreateOrigin = () => {
                               type="text"
                               className="form-control"
                               id="inputEmail5"
-                              {...register("name")}
+                              {...register("name", {
+                                required:"Bạn cần nhập tên"
+                              })
+                             }
                             />
+                            <p className="text-danger">{errors?.name?.message}</p>
                           </div>
                         </div>
                         <button
