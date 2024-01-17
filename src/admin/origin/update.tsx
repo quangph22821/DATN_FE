@@ -62,8 +62,12 @@ const UpdateOrigin = () => {
                               type="text"
                               className="form-control"
                               id="inputEmail5"
-                              {...register("name")}
+                              {...register("name"),
+                              {
+                                required: "Vui lòng không để trống",
+                              }}
                             />
+                            <p className="text-danger">{errors?.price?.message}</p>
                           </div>
                         </div>
                         <button
