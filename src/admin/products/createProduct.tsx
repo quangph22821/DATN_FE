@@ -161,8 +161,12 @@ const CreateProducts = () => {
                               type="text"
                               className="form-control"
                               id="inputEmail5"
-                              {...register("name")}
+                              {...register("name", {
+                                required:"Bạn cần nhập tên"
+                              })
+                             }
                             />
+                            <p className="text-danger">{errors?.name?.message}</p>
                           </div>
                           <div className="form-group col-md-6">
                             <label htmlFor="inputPassword4">Price</label>
@@ -171,8 +175,11 @@ const CreateProducts = () => {
                               className="form-control"
                               id="inputPassword5"
                               min="0"
-                              {...register("price")}
+                              {...register("price", {
+                                required:"Bạn cần nhập giá"
+                              })}
                             />
+                             <p className="text-danger">{errors?.price?.message}</p>
                           </div>
                         </div>
                         <div className="form-row">
@@ -199,7 +206,10 @@ const CreateProducts = () => {
                           </Upload> */}
                             <label htmlFor="inputAddress">Image</label>
                             <br />
-                            <input type="file" multiple {...register("img")} />
+                            <input type="file" multiple {...register("img", {
+                                required:"Bạn cần thêm ảnh"
+                              })} />
+                               <p className="text-danger">{errors?.img?.message}</p>
                           </div>
                           <div className="form-group col-md-6">
                             <label htmlFor="inputAddress2">Description</label>
@@ -207,8 +217,11 @@ const CreateProducts = () => {
                               className="form-control"
                               id="inputAddress6"
                               placeholder="Description"
-                              {...register("description")}
+                              {...register("description", {
+                                required:"Bạn cần nhập mô tả"
+                              })}
                             />
+                             <p className="text-danger">{errors?.description?.message}</p>
                           </div>
                         </div>
                         <div className="form-row">
@@ -219,8 +232,12 @@ const CreateProducts = () => {
                               className="form-control"
                               id="inputEmail5"
                               min="0"
-                              {...register("weight")}
+                              {...register("weight", {
+                                required:"Bạn cần nhập trọng lượng",
+                                
+                              })}
                             />
+                             <p className="text-danger">{errors?.weight?.message}</p>
                           </div>
                           <div className="form-group col-md-6">
                             <label htmlFor="inputPassword4">Chiều cao</label>
@@ -229,8 +246,11 @@ const CreateProducts = () => {
                               className="form-control"
                               id="inputPassword5"
                               min="0"
-                              {...register("height")}
+                              {...register("height", {
+                                required:"Bạn cần nhập chiều cao"
+                              })}
                             />
+                             <p className="text-danger">{errors?.height?.message}</p>
                           </div>
                         </div>
                         <div className="form-row">
@@ -239,7 +259,9 @@ const CreateProducts = () => {
                             <select
                               id="inputState5"
                               className="form-control"
-                              {...register("materialId")}
+                              {...register("materialId", {
+                                required:"Bạn cần nhập xuất xứ"
+                              })}
                             >
                               <option value="">Chọn Xuất xứ</option>
                               {material.map((item) => {
@@ -248,13 +270,16 @@ const CreateProducts = () => {
                                 );
                               })}
                             </select>
+                            <p className="text-danger">{errors?.materialId?.message}</p>
                           </div>
                           <div className="form-group col-md-4">
                             <label htmlFor="inputState">Chất liệu</label>
                             <select
                               id="inputState5"
                               className="form-control"
-                              {...register("originId")}
+                              {...register("originId", {
+                                required:"Bạn cần nhập chất liệu"
+                              })}
                             >
                               <option value="">Chọn Chất Liệu</option>
                               {origin.map((item) => {
@@ -263,13 +288,16 @@ const CreateProducts = () => {
                                 );
                               })}
                             </select>
+                            <p className="text-danger">{errors?.originId?.message}</p>
                           </div>
                           <div className="form-group col-md-4">
                             <label htmlFor="inputState">Danh mục</label>
                             <select
                               id="inputState5"
                               className="form-control"
-                              {...register("categoryId")}
+                              {...register("categoryId", {
+                                required:"Bạn cần nhập danh mục"
+                              })}
                             >
                               <option value="">Chọn Danh Mục</option>
                               {category.map((item) => {
@@ -278,6 +306,7 @@ const CreateProducts = () => {
                                 );
                               })}
                             </select>
+                            <p className="text-danger">{errors?.categoryId?.message}</p>
                           </div>
                         </div>
                         <button
