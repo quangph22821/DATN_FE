@@ -38,8 +38,11 @@ const CreateMaterial = () => {
                                 type="text"
                                 className="form-control"
                                 id="inputEmail5"
-                                {...register("name")}
+                                {...register("name"),{
+                                  required: "Vui lòng nhập mật khẩu mới",
+                                }}
                               />
+                              <p className="text-danger">{errors?.name?.message}</p>
                             </div>
                           </div>
                           <button
