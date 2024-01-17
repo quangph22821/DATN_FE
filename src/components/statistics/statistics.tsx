@@ -4,11 +4,10 @@ import { DatePicker, Empty, Select, Space, Spin, TimePicker } from "antd";
 import ReactApexChart from "react-apexcharts";
 import Chart from "react-apexcharts";
 import axios from "axios";
-const colors = ['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0'];
-
-
+const colors = ["#008FFB", "#00E396", "#FEB019", "#FF4560", "#775DD0"];
 
 const MyChart = () => {
+  const [topSellingProducts, setTopSellingProducts] = useState([]);
   const [monthlyPrices, setMonthlyPrices] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -49,9 +48,7 @@ const MyChart = () => {
           "28",
           "29",
           "30",
-          "31"
-
-
+          "31",
         ],
       },
     },
@@ -93,83 +90,17 @@ const MyChart = () => {
     ],
   });
 
-  const [chartData3, setChartData3] = useState({
-    options: {
-      chart: {
-        id: "pie-chart",
-        type: "pie",
-      },
-      labels: ["Đặt thành công", "Hủy đơn hàng"],
-      dataLabels: {
-        enabled: false,
-      },
-    },
-    series: [],
-  });
-
-  const [chartData4, setChartData4] = useState({
-    series: [{
-      data: [21, 22, 10, 28, 16, 21, 13, 30, 14, 9]
-    }],
-    options: {
-      chart: {
-        height: 350,
-        type: 'bar',
-        events: {
-          click: function (chart, w, e) {
-            // console.log(chart, w, e)
-          }
-        }
-      },
-      colors: colors,
-      plotOptions: {
-        bar: {
-          columnWidth: '45%',
-          distributed: true,
-        }
-      },
-      dataLabels: {
-        enabled: false
-      },
-      legend: {
-        show: false
-      },
-      xaxis: {
-        categories: [
-          ['John', 'Doe'],
-          ['Peter', 'Brown'],
-          ['Joe', 'Smith'],
-          ['Jake', 'Williams'],
-          'Amber',
-          ['Peter', 'Brown'],
-          ['Peter', 'Brown'],
-          ['Mary', 'Evans'],
-          ['David', 'Wilson'],
-          ['Lily', 'Roberts'],
-        ],
-        labels: {
-          style: {
-            colors: colors,
-            fontSize: '12px'
-          }
-        }
-      }
-    },
-  });
-
-  
-
   // Hàm fetch dữ liệu từ API
   const fetchData = async (year: any) => {
     try {
       setLoading(true);
 
       // Gọi API để lấy dữ liệu doanh thu cho năm được chọn
-      const response = await axios.get(`http://localhost:8080/byyear?selectedYear=${year}`);
+      const response = await axios.get(
+        `http://localhost:8080/byyear?selectedYear=${year}`
+      );
       const apiData = response.data.monthlyTotalPrices;
       console.log("apiYear", apiData);
-
-
 
       setChartData2((prevChartData: any) => ({
         ...prevChartData,
@@ -179,15 +110,13 @@ const MyChart = () => {
             data: apiData,
           },
         ],
-
       }));
-
 
       setLoading(false);
     } catch (error) {
       console.error(error);
       setLoading(false);
-    } 
+    }
   };
 
   // CALL API THEO Tháng
@@ -196,7 +125,9 @@ const MyChart = () => {
       setLoading(true);
 
       // Gọi API để lấy dữ liệu doanh thu cho năm được chọn
-      const response = await axios.get(`http://localhost:8080/bymonth?selectedYear=${year}&selectedMonth=${month}`);
+      const response = await axios.get(
+        `http://localhost:8080/bymonth?selectedYear=${year}&selectedMonth=${month}`
+      );
       const apiData = response.data.dailyTotalPrices;
       console.log("apiMonth", apiData);
 
@@ -208,16 +139,7 @@ const MyChart = () => {
             data: apiData,
           },
         ],
-        // options: {
-        //   ...prevChartData.options,
-        //   xaxis: {
-        //     ...prevChartData.options.xaxis,
-        //     categories: month,
-        //   },
-        // },
-
       }));
-
 
       setLoading(false);
     } catch (error) {
@@ -232,22 +154,37 @@ const MyChart = () => {
       try {
         const result = await axios.get("http://localhost:8080/rate");
         console.log(result.data);
-        const cancelRate = result.data.cancelRate
-        const successRate = result.data.successRate
+        const cancelRate = result.data.cancelRate;
+        const successRate = result.data.successRate;
         console.log("rate: " + successRate, cancelRate);
-        
-        
+
         // Cập nhật giá trị series trong state với dữ liệu mới
         setChartData3({
           ...chartData3,
-          series: [successRate || cancelRate],
+          series: [successRate && cancelRate],
         });
       } catch (error) {
-        console.error('Error fetching statistics:', error.message);
+        console.error("Error fetching statistics:", error.message);
       }
     };
 
     fetchStatistics();
+  }, []);
+
+  // CALL SẢN PHẨM BÁN CHẠY
+  useEffect(() => {
+    const fetchTopProduct = async () => {
+      try {
+        const result = await axios.get("http://localhost:8080/topCategory");
+        console.log(result.data.topSellingProducts);
+        // Cập nhật giá trị series trong state với dữ liệu mới
+        setTopSellingProducts(result.data.topSellingProducts);
+      } catch (error) {
+        console.error("Error fetching statistics:", error.message);
+      }
+    };
+
+    fetchTopProduct();
   }, []);
 
   // Hàm được gọi khi người dùng thay đổi năm trên DatePicker
@@ -256,12 +193,11 @@ const MyChart = () => {
       fetchData(dateString);
     }
   };
-
-  const onChangeMonth: DatePickerProps['onChange'] = (_, dateString) => {
+  const onChangeMonth: DatePickerProps["onChange"] = (_, dateString) => {
     const lastTwoCharacters = dateString.slice(-2);
     const lastTwoYear = dateString.slice(0, 4);
     if (lastTwoCharacters && lastTwoYear) {
-      fetchDataMonth(lastTwoYear, lastTwoCharacters)
+      fetchDataMonth(lastTwoYear, lastTwoCharacters);
     }
   };
 
@@ -282,7 +218,6 @@ const MyChart = () => {
             width={475}
           />
         </div>
-
         {/* Phần Biểu đồ hàng năm */}
         <div style={{ flex: 1 }}>
           <div className="flex justify-between mt-[100px] mb-[40px]">
@@ -307,26 +242,39 @@ const MyChart = () => {
           </div>
         </div>
       </div>
-      <div style={{ display: "flex", marginBottom: "20px" }}>
-        <div style={{ flex: 1, marginRight: "10px" }}>
-          <h2>Tỷ lệ đặt hàng thành công</h2>
-          <ReactApexChart
-            options={chartData3.options}
-            series={chartData3.series}
-            type="pie"
-            height={350}
-            width={475}
-          />
-        </div>
-        <div style={{ flex: 1 }}>
+      <div>
+        <div>
           <h2>Danh mục bán chạy nhất</h2>
-          <ReactApexChart
-            options={chartData4.options}
-            series={chartData4.series}
-            type="bar"
-            height={350}
-            width={475}
-          />
+          <div>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Tên sản phẩm</th>
+                  <th scope="col">Giá</th>
+                  <th scope="col">Số lượt bán</th>
+                </tr>
+              </thead>
+              <tbody>
+                {topSellingProducts.slice(0, 5).map((product, index) => (
+                  <tr key={product.productId}>
+                    <td>{index + 1}</td>
+                    <td>{product.name}</td>
+                    <td>
+                      {" "}
+                      {new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      }).format(product.price)}
+                    </td>
+                    <td>{product.count}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
