@@ -31,7 +31,7 @@ import ForgotPassword from "./pages/forgotpassword/forgotpassword";
 import UpdatePassword from "./pages/updateUser";
 import NotFoundPage from "./pages/notFound";
 import UpdateBill from "./admin/bill/updateBill";
-import ListCommentPage from "./admin/comment/listComment";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -90,7 +90,7 @@ const router = createBrowserRouter([
       { path: "/admin/listUser", element: <ListUsersPage /> },
       
       // Comment
-      { path: "/admin/listComment", element: <ListCommentPage /> },
+      
     ],
   },
   { path: "*", element: <NotFoundPage /> },
