@@ -27,6 +27,7 @@ import UpdateMaterial from "./admin/material/update";
 import ListProductsPage from "./admin/products/listProduct";
 import CreateProducts from "./admin/products/createProduct";
 import UpdateProducts from "./admin/products/updateProduct";
+import NotFoundPage from "./pages/notFound";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -44,6 +45,7 @@ const router = createBrowserRouter([
       { path: "/signup", element: <Signup /> },
       { path: "/profile", element: <ProfilePage /> },
       { path: "/bills/user/:id", element: <HistoryPage /> },
+      { path: "***", element: <NotFoundPage /> },
     ],
   },
   {
