@@ -68,7 +68,7 @@ const UpdateMaterial = () => {
                               className="form-control"
                               id="inputEmail5"
                               {...register("name"), {
-                                required: "Vui lòng nhập mật khẩu mới",
+                                required: "Vui lòng không để trống",
                               }}
                             />
                             <p className="text-danger">{errors?.name?.message}</p>
