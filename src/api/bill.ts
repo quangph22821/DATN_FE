@@ -33,7 +33,7 @@ export const UpdateStatus = (bill: any) => {
 };
 // HUỶ ĐƠN HÀNG
 export const CancelBill = (billId: any, newStatus: any) => {
-    return instance.put(`/api/bill/cancel/status/${billId}`, { newStatus }, options());
+    return instance.put(`/bills/cancel/status/${billId}`, { newStatus }, options());
   };
 //HIỂN THỊ BILL Confirmed
 export const ConfirmedBill = () => {
