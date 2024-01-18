@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { IProducts } from "../../models/products";
-import { RootState } from "../../store";
+import { AppDispatch, RootState } from "../../store";
 import {
   fetchProductsAll,
   fetchProductsRemove,
@@ -24,7 +24,7 @@ interface DataType {
 
 const ListProductsPage = () => {
   const { product } = useSelector((state: RootState) => state.products);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     dispatch(fetchProductsAll());
@@ -86,17 +86,7 @@ const ListProductsPage = () => {
               Edit
             </Button>
           </Link>
-          <Popconfirm
-            title="Bạn có chắc chắn là xóa sản phẩm này?"
-            onConfirm={() => confirmDelete(record.key)}
-            onCancel={cancelDelete}
-            okText="Đồng ý"
-            cancelText="Không"
-          >
-            <Button type="primary" danger>
-              Delete
-            </Button>
-          </Popconfirm>
+          
         </Space>
       ),
     },
