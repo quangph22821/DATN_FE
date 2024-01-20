@@ -30,7 +30,7 @@ const ListOriginPage = () => {
       message.success("Chất liệu đã được xóa thành công");
     } catch (error) {
       if (!error) {
-        setTimeout(message.loading("đang sử lí .."), 2000);
+        setTimeout(message.loading("đang sử lí..."), 2000);
       } else {
         message.error(`Lỗi khi xóa chất liệu này: ${error}`);
       }
